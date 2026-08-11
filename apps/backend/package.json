@@ -1,0 +1,26 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.11.1",
+    "@hono/zod-validator": "^0.9.0",
+    "drizzle-orm": "^0.30.10",
+    "hono": "^4.4.1",
+    "postgres": "^3.4.4",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.2",
+    "drizzle-kit": "^0.21.4",
+    "tsx": "^4.15.1",
+    "typescript": "^5.4.5"
+  }
+}

@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+apps/frontend/.nuxt/
+apps/frontend/.output/
+apps/frontend/dist/
+apps/backend/dist/
+
+# Drizzle migrations output
+apps/backend/drizzle/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor directories
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
