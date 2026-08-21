@@ -2,11 +2,9 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '~/stores/auth'
-import { useApi } from '~/composables/useApi'
 
 const router = useRouter()
 const authStore = useAuthStore()
-const { fetchApi } = useApi()
 
 const email = ref('')
 const password = ref('')
@@ -14,25 +12,28 @@ const loading = ref(false)
 const error = ref('')
 
 const handleLogin = async () => {
+  if (!email.value || !password.value) {
+    error.value = 'Please enter your email and password.'
+    return
+  }
+
   loading.value = true
   error.value = ''
   
-  const { data, error: apiError } = await fetchApi<{ token: string, user: any }>('/auth/login', {
-    method: 'POST',
-    body: { email: email.value, password: password.value }
+  const result = await authStore.login({
+    email: email.value,
+    password: password.value,
   })
   
   loading.value = false
   
-  if (apiError) {
-    error.value = apiError
+  if (!result.success) {
+    error.value = result.error || 'Failed to log in.'
     return
   }
   
-  if (data) {
-    authStore.setAuth(data.token, data.user)
-    router.push(data.user.role === 'CHEF' ? '/dashboard/chef' : '/dashboard/user')
-  }
+  const userRole = (result.user?.role || '').toLowerCase()
+  router.push(userRole === 'chef' ? '/dashboard/chef' : '/dashboard/user')
 }
 </script>
 
@@ -63,8 +64,18 @@ const handleLogin = async () => {
           </div>
         </div>
 
-        <div v-if="error" class="text-red-500 text-sm text-center bg-red-50 py-2 rounded-lg">
-          {{ error }}
+        <div v-if="error" class="p-4 bg-red-50 border border-red-200 rounded-xl flex items-start space-x-3 text-red-700 text-sm">
+          <svg class="w-5 h-5 text-red-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <div class="flex-1">
+            <div class="font-semibold mb-1">{{ error }}</div>
+            <div v-if="error.toLowerCase().includes('no account') || error.toLowerCase().includes('not found') || error.toLowerCase().includes('sign up')" class="mt-2 pt-2 border-t border-red-200">
+              <NuxtLink :to="{ path: '/auth/signup', query: { email } }" class="inline-flex items-center gap-1 text-orange-600 font-bold hover:text-orange-700 transition-colors">
+                Create account for {{ email }} &rarr;
+              </NuxtLink>
+            </div>
+          </div>
         </div>
 
         <div>

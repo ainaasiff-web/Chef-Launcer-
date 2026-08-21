@@ -1,78 +1,112 @@
 import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
 import { z } from "zod";
-import { db } from "../db/index.js";
-import { menus, chefProfiles } from "../db/schema.js";
-import { eq } from "drizzle-orm";
-import { authMiddleware, Variables } from "../middleware/auth.js";
+import { safeDb } from "../db/index.js";
+import { authMiddleware, chefOnlyMiddleware, Variables } from "../middleware/auth.js";
 
 export const menusRouter = new Hono<{ Variables: Variables }>();
 
-const menuSchema = z.object({
-  title: z.string().min(1),
+const normalizeSubscriptionType = (type?: string): "one_time" | "weekly" | "monthly" => {
+  if (!type) return "one_time";
+  const lower = type.toLowerCase();
+  if (lower.includes("weekly")) return "weekly";
+  if (lower.includes("monthly")) return "monthly";
+  return "one_time";
+};
+
+const createMenuSchema = z.object({
+  title: z.string().min(1, "Menu title is required"),
   description: z.string().optional(),
-  price: z.number().positive(),
-  recurringType: z.enum(["ONE_TIME", "WEEKLY_SUBSCRIPTION", "MONTHLY_SUBSCRIPTION"]),
-  imageUrl: z.string().optional(),
+  price: z.number().int().positive("Price must be a positive integer in cents"),
+  subscriptionType: z.string().optional().default("one_time"),
+  subscription_type: z.string().optional(),
 });
 
+// GET /menus - Public list of available menus/subscriptions
+menusRouter.get("/", async (c) => {
+  try {
+    const menusList = await safeDb.getAllMenus();
+    return c.json({ success: true, data: menusList });
+  } catch (err: any) {
+    console.error("[Menus List Error]:", err);
+    return c.json({ success: false, error: "Failed to fetch menus" }, 500);
+  }
+});
+
+// POST /menus - Protected route (Chef role only) to create a new menu option
 menusRouter.post(
   "/",
   authMiddleware,
-  zValidator("json", menuSchema),
+  chefOnlyMiddleware,
+  zValidator("json", createMenuSchema, (result, c) => {
+    if (!result.success) {
+      const issue = result.error.issues[0];
+      return c.json({ success: false, error: issue?.message || "Invalid menu data" }, 400);
+    }
+  }),
   async (c) => {
-    const user = c.get("user");
-    if (user.role !== "CHEF") {
-      return c.json({ error: "Only chefs can create menus" }, 403);
+    try {
+      const user = c.get("user");
+
+      const chefProfile = await safeDb.getChefProfileByUserId(user.id);
+      if (!chefProfile) {
+        return c.json(
+          { success: false, error: "Chef profile not found. Please create a chef profile first." },
+          400
+        );
+      }
+
+      const body = c.req.valid("json");
+      const rawSub = body.subscriptionType || body.subscription_type;
+      const subscriptionType = normalizeSubscriptionType(rawSub);
+
+      const newMenu = await safeDb.createMenu({
+        chefId: chefProfile.id,
+        title: body.title,
+        description: body.description,
+        price: body.price,
+        subscriptionType,
+      });
+
+      return c.json({
+        success: true,
+        message: "Menu created successfully",
+        data: newMenu,
+      }, 201);
+    } catch (err: any) {
+      console.error("[Menu Create Error]:", err);
+      return c.json({ success: false, error: "Failed to create menu" }, 500);
     }
-
-    const [chef] = await db.select().from(chefProfiles).where(eq(chefProfiles.userId, user.id));
-    if (!chef) {
-      return c.json({ error: "Chef profile not found. Create one first." }, 400);
-    }
-
-    const body = c.req.valid("json");
-    const [newMenu] = await db
-      .insert(menus)
-      .values({ ...body, chefId: chef.id })
-      .returning();
-
-    return c.json(newMenu);
   }
 );
 
-menusRouter.get("/", async (c) => {
-  const allMenus = await db.select().from(menus).where(eq(menus.status, "ACTIVE"));
-  return c.json(allMenus);
-});
-
-menusRouter.put(
+// DELETE /menus/:id - Protected route (Chef role only) to remove a menu
+menusRouter.delete(
   "/:id",
   authMiddleware,
-  zValidator("json", menuSchema.partial()),
+  chefOnlyMiddleware,
   async (c) => {
-    const user = c.get("user");
-    const menuId = c.req.param("id");
+    try {
+      const user = c.get("user");
+      const menuId = c.req.param("id");
 
-    if (user.role !== "CHEF") {
-      return c.json({ error: "Only chefs can update menus" }, 403);
+      const chefProfile = await safeDb.getChefProfileByUserId(user.id);
+      if (!chefProfile) {
+        return c.json({ success: false, error: "Chef profile not found" }, 400);
+      }
+
+      const deleted = await safeDb.deleteMenu(menuId, chefProfile.id);
+      if (!deleted) {
+        return c.json(
+          { success: false, error: "Menu not found or you do not have permission to delete it" },
+          404
+        );
+      }
+
+      return c.json({ success: true, message: "Menu deleted successfully" });
+    } catch (err: any) {
+      console.error("[Menu Delete Error]:", err);
+      return c.json({ success: false, error: "Failed to delete menu" }, 500);
     }
-
-    const [chef] = await db.select().from(chefProfiles).where(eq(chefProfiles.userId, user.id));
-    if (!chef) return c.json({ error: "Chef profile not found" }, 400);
-
-    const [existingMenu] = await db.select().from(menus).where(eq(menus.id, menuId));
-    if (!existingMenu || existingMenu.chefId !== chef.id) {
-      return c.json({ error: "Menu not found or not owned by you" }, 404);
-    }
-
-    const body = c.req.valid("json");
-    const [updatedMenu] = await db
-      .update(menus)
-      .set(body)
-      .where(eq(menus.id, menuId))
-      .returning();
-
-    return c.json(updatedMenu);
   }
 );

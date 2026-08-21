@@ -117,14 +117,14 @@ const stats = [
         <div class="grid md:grid-cols-3 gap-8">
           <div
             v-for="(step, i) in [
-              { icon: ChefHat, color: 'orange', title: 'Discover Chefs', desc: 'Browse profiles of vetted chefs specializing in cuisines from around the world.' },
-              { icon: CalendarClock, color: 'rose', title: 'Subscribe to Menus', desc: 'Choose one-time orders or weekly/monthly subscriptions. Pause or cancel anytime.' },
-              { icon: TrendingUp, color: 'amber', title: 'Support Creators', desc: 'Chefs earn directly from their passion and build their brand on the platform.' },
+              { icon: ChefHat, badgeBg: 'bg-orange-100 text-orange-600 group-hover:bg-orange-500 group-hover:text-white', title: 'Discover Chefs', desc: 'Browse profiles of vetted chefs specializing in cuisines from around the world.' },
+              { icon: CalendarClock, badgeBg: 'bg-rose-100 text-rose-600 group-hover:bg-rose-500 group-hover:text-white', title: 'Subscribe to Menus', desc: 'Choose one-time orders or weekly/monthly subscriptions. Pause or cancel anytime.' },
+              { icon: TrendingUp, badgeBg: 'bg-amber-100 text-amber-600 group-hover:bg-amber-500 group-hover:text-white', title: 'Support Creators', desc: 'Chefs earn directly from their passion and build their brand on the platform.' },
             ]"
             :key="i"
             class="p-8 rounded-3xl bg-neutral-50 border border-neutral-100 hover:shadow-xl hover:-translate-y-1 transition-all group"
           >
-            <div :class="`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-colors bg-${step.color}-100 text-${step.color}-600 group-hover:bg-${step.color}-500 group-hover:text-white`">
+            <div :class="['w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-colors', step.badgeBg]">
               <component :is="step.icon" class="w-7 h-7" />
             </div>
             <div class="text-4xl font-black text-neutral-100 mb-2">0{{ i + 1 }}</div>

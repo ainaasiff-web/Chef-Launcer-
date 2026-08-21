@@ -1,35 +1,36 @@
 import {
   pgTable,
-  serial,
   text,
   timestamp,
-  boolean,
   uuid,
   pgEnum,
-  decimal,
   integer,
+  boolean,
 } from "drizzle-orm/pg-core";
 
-export const roleEnum = pgEnum("role", ["CHEF", "USER", "ADMIN"]);
-export const statusEnum = pgEnum("status", ["ACTIVE", "PENDING"]);
-export const recurringTypeEnum = pgEnum("recurring_type", [
-  "ONE_TIME",
-  "WEEKLY_SUBSCRIPTION",
-  "MONTHLY_SUBSCRIPTION",
+export const roleEnum = pgEnum("role", ["diner", "chef"]);
+export const subscriptionTypeEnum = pgEnum("subscription_type", [
+  "one_time",
+  "weekly",
+  "monthly",
 ]);
 export const subscriptionStatusEnum = pgEnum("subscription_status", [
-  "ACTIVE",
-  "CANCELED",
-  "PAST_DUE",
+  "active",
+  "canceled",
+]);
+export const menuItemTypeEnum = pgEnum("menu_item_type", [
+  "SET_MENU",
+  "A_LA_CARTE",
 ]);
 
 export const users = pgTable("users", {
   id: uuid("id").defaultRandom().primaryKey(),
+  name: text("name"),
   email: text("email").notNull().unique(),
-  phoneNumber: text("phone_number"),
+  phone: text("phone").notNull(),
+  dob: text("dob"),
   passwordHash: text("password_hash").notNull(),
-  role: roleEnum("role").default("USER").notNull(),
-  isVerified: boolean("is_verified").default(false).notNull(),
+  role: roleEnum("role").default("diner").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -37,12 +38,15 @@ export const chefProfiles = pgTable("chef_profiles", {
   id: uuid("id").defaultRandom().primaryKey(),
   userId: uuid("user_id")
     .references(() => users.id, { onDelete: "cascade" })
-    .notNull(),
+    .notNull()
+    .unique(),
+  name: text("name"),
   bio: text("bio"),
-  profileImage: text("profile_image"),
   cuisineType: text("cuisine_type"),
+  profileImage: text("profile_image"),
+  rating: text("rating"),
   stripeConnectId: text("stripe_connect_id"),
-  status: statusEnum("status").default("PENDING").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
 export const menus = pgTable("menus", {
@@ -53,11 +57,27 @@ export const menus = pgTable("menus", {
   title: text("title").notNull(),
   description: text("description"),
   price: integer("price").notNull(), // price in cents
-  recurringType: recurringTypeEnum("recurring_type")
-    .default("ONE_TIME")
+  subscriptionType: subscriptionTypeEnum("subscription_type")
+    .default("one_time")
     .notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const menuItems = pgTable("menu_items", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  chefId: uuid("chef_id")
+    .references(() => chefProfiles.id, { onDelete: "cascade" })
+    .notNull(),
+  name: text("name").notNull(),
+  description: text("description"),
+  category: text("category").default("Mains").notNull(),
+  price: integer("price").notNull(), // in cents
   imageUrl: text("image_url"),
-  status: statusEnum("status").default("ACTIVE").notNull(),
+  isAvailable: boolean("is_available").default(true).notNull(),
+  type: text("type").default("A_LA_CARTE").notNull(), // 'SET_MENU' vs 'A_LA_CARTE'
+  dayOfWeek: text("day_of_week"), // 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'ALL_WEEK'
+  mealType: text("meal_type").default("LUNCH"), // 'BREAKFAST', 'LUNCH', 'DINNER'
+  createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
 export const subscriptions = pgTable("subscriptions", {
@@ -68,7 +88,24 @@ export const subscriptions = pgTable("subscriptions", {
   menuId: uuid("menu_id")
     .references(() => menus.id, { onDelete: "cascade" })
     .notNull(),
+  status: subscriptionStatusEnum("status").default("active").notNull(),
   stripeSubscriptionId: text("stripe_subscription_id"),
-  status: subscriptionStatusEnum("status").default("ACTIVE").notNull(),
-  currentPeriodEnd: timestamp("current_period_end"),
 });
+
+export const orders = pgTable("orders", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  orderNumber: text("order_number").notNull().unique(),
+  userId: uuid("user_id")
+    .references(() => users.id, { onDelete: "cascade" })
+    .notNull(),
+  chefId: text("chef_id"),
+  dishName: text("dish_name").notNull(),
+  category: text("category"),
+  mealType: text("meal_type"),
+  price: integer("price").notNull(), // in cents
+  status: text("status").default("confirmed").notNull(),
+  imageUrl: text("image_url"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+

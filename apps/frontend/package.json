@@ -3,9 +3,9 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "build": "nuxt build",
+    "build": "nuxt generate && node -e \"const fs=require('fs'); if(fs.existsSync('dist')){ fs.mkdirSync('.output/public', {recursive:true}); fs.cpSync('dist', '.output/public', {recursive:true}); fs.writeFileSync('dist/_redirects', '/* /index.html 200\\n'); fs.writeFileSync('.output/public/_redirects', '/* /index.html 200\\n'); }\"",
     "dev": "nuxt dev",
-    "generate": "nuxt generate",
+    "generate": "nuxt generate && node -e \"const fs=require('fs'); if(fs.existsSync('dist')){ fs.mkdirSync('.output/public', {recursive:true}); fs.cpSync('dist', '.output/public', {recursive:true}); fs.writeFileSync('dist/_redirects', '/* /index.html 200\\n'); fs.writeFileSync('.output/public/_redirects', '/* /index.html 200\\n'); }\"",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
   },

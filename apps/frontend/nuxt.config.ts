@@ -2,6 +2,17 @@
 export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
+  telemetry: false,
+
+  ssr: false,
+
+  nitro: {
+    preset: 'cloudflare-pages-static',
+    prerender: {
+      autoSubfolderIndex: true,
+      routes: ['/']
+    }
+  },
 
   // Use root as source directory (Nuxt 3 style layout)
   srcDir: '.',
@@ -24,7 +35,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      apiBase: process.env.NUXT_PUBLIC_API_BASE || 'http://localhost:3001'
+      apiBase: process.env.NUXT_PUBLIC_API_BASE || process.env.NUXT_PUBLIC_API_BASE_URL || process.env.API_BASE_URL || 'http://localhost:3001'
     }
   }
 })

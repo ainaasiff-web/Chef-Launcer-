@@ -69,6 +69,8 @@ const handleLogout = () => {
       <slot />
     </main>
     
+    <ToastContainer />
+
     <footer class="bg-white border-t border-neutral-200 mt-20">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col md:flex-row justify-between items-center gap-6">
         <div class="flex items-center gap-2 text-neutral-800 font-bold">
