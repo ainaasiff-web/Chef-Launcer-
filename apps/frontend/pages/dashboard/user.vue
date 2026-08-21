@@ -18,17 +18,21 @@ const loading = ref(true)
 const showSuccessBanner = ref(route.query.success === 'true')
 
 onMounted(async () => {
-  const { data: subData } = await fetchApi<any>('/subscriptions')
-  if (subData?.data) {
-    subscriptionsList.value = subData.data
-  }
+  try {
+    const { data: subData } = await fetchApi<any>('/subscriptions')
+    if (subData?.data && Array.isArray(subData.data)) {
+      subscriptionsList.value = subData.data
+    }
 
-  const { data: orderData } = await fetchApi<any>('/orders/me')
-  if (orderData?.data) {
-    ordersList.value = orderData.data
+    const { data: orderData } = await fetchApi<any>('/orders/me')
+    if (orderData?.data && Array.isArray(orderData.data)) {
+      ordersList.value = orderData.data
+    }
+  } catch (err) {
+    console.error('Failed to load user dashboard data:', err)
+  } finally {
+    loading.value = false
   }
-
-  loading.value = false
 })
 
 const defaultDishImage = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500&auto=format&fit=crop'

@@ -43,29 +43,33 @@ const itemSubscriptionType = ref<'one_time' | 'weekly' | 'monthly'>('one_time')
 const fetchAllData = async () => {
   loading.value = true
 
-  // 1. Fetch menus
-  const { data: menusRes } = await fetchApi<any>('/menus')
-  const mItems = menusRes?.data || menusRes
-  if (Array.isArray(mItems)) {
-    menusList.value = mItems
-  }
+  try {
+    // 1. Fetch menus
+    const { data: menusRes } = await fetchApi<any>('/menus')
+    const mItems = menusRes?.data || menusRes
+    if (Array.isArray(mItems)) {
+      menusList.value = mItems
+    }
 
-  // 2. Fetch menu items if current chef profile exists
-  if (authStore.user) {
-    const { data: chefRes } = await fetchApi<any>('/chefs')
-    const chefs = chefRes?.data || chefRes
-    const myProfile = Array.isArray(chefs) ? chefs.find((c: any) => c.user?.email === authStore.user?.email) : null
-    
-    if (myProfile?.id) {
-      const { data: itemsRes } = await fetchApi<any>(`/menu-items?chefId=${myProfile.id}`)
-      const items = itemsRes?.data || itemsRes
-      if (Array.isArray(items)) {
-        menuItemsList.value = items
+    // 2. Fetch menu items if current chef profile exists
+    if (authStore.user) {
+      const { data: chefRes } = await fetchApi<any>('/chefs')
+      const chefs = chefRes?.data || chefRes
+      const myProfile = Array.isArray(chefs) ? chefs.find((c: any) => c.user?.email === authStore.user?.email) : null
+      
+      if (myProfile?.id) {
+        const { data: itemsRes } = await fetchApi<any>(`/menu-items?chefId=${myProfile.id}`)
+        const items = itemsRes?.data || itemsRes
+        if (Array.isArray(items)) {
+          menuItemsList.value = items
+        }
       }
     }
+  } catch (err) {
+    console.error('Failed to load chef dashboard data:', err)
+  } finally {
+    loading.value = false
   }
-
-  loading.value = false
 }
 
 onMounted(() => {
