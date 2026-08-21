@@ -7,11 +7,15 @@ export default defineNuxtConfig({
   ssr: false,
 
   nitro: {
-    preset: 'cloudflare-pages-static',
+    preset: 'cloudflare-pages',
     prerender: {
       autoSubfolderIndex: true,
       routes: ['/']
     }
+  },
+
+  experimental: {
+    payloadExtraction: false
   },
 
   // Use root as source directory (Nuxt 3 style layout)
