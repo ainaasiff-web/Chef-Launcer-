@@ -6,9 +6,21 @@ export default defineNuxtConfig({
 
   ssr: false,
 
+  app: {
+    baseURL: '/',
+    buildAssetsDir: '/_nuxt/'
+  },
+
+  router: {
+    options: {
+      hashMode: false
+    }
+  },
+
   nitro: {
     preset: 'cloudflare-pages',
     prerender: {
+      crawlLinks: false,
       autoSubfolderIndex: true,
       routes: ['/']
     }
