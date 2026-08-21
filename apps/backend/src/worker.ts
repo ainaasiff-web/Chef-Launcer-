@@ -1,4 +1,3 @@
-import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
 import { logger } from 'hono/logger'
 import { cors } from 'hono/cors'
@@ -26,7 +25,7 @@ app.use('*', cors({
 }))
 
 app.get('/', (c) => {
-  return c.json({ message: 'Welcome to Chef Launcher API' })
+  return c.json({ message: 'Welcome to Chef Launcher Backend API on Cloudflare Workers' })
 })
 
 app.route('/auth', authRouter)
@@ -43,8 +42,6 @@ app.route('/subscriptions', subscriptionsRouter)
 app.route('/api/subscriptions', subscriptionsRouter)
 app.route('/orders', ordersRouter)
 app.route('/api/orders', ordersRouter)
-
-
 
 app.onError((err, c) => {
   console.error('[Hono Error]:', err)
@@ -66,14 +63,6 @@ app.notFound((c) => {
     },
     404
   )
-})
-
-const port = 3001
-console.log(`Server is running on port ${port}`)
-
-serve({
-  fetch: app.fetch,
-  port,
 })
 
 export default app
