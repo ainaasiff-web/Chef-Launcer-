@@ -7,11 +7,16 @@ import { chefsRouter } from './routes/chefs.js';
 import { menusRouter } from './routes/menus.js';
 import { menuItemsRouter } from './routes/menuItems.js';
 import { checkoutRouter } from './routes/checkout.js';
-import { subscriptionsRouter } from './routes/subscriptions.js';
+import { ordersRouter } from './routes/orders.js';
 const app = new Hono();
 app.use('*', logger());
 app.use('*', cors({
-    origin: ['http://localhost:3000', 'http://127.0.0.1:3000'],
+    origin: (origin) => {
+        if (!origin || origin.includes('localhost') || origin.includes('127.0.0.1') || origin.endsWith('.pages.dev') || origin.includes('pages.dev')) {
+            return origin || '*';
+        }
+        return 'https://chef-launcer.pages.dev';
+    },
     allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
@@ -31,6 +36,8 @@ app.route('/checkout', checkoutRouter);
 app.route('/api/checkout', checkoutRouter);
 app.route('/subscriptions', subscriptionsRouter);
 app.route('/api/subscriptions', subscriptionsRouter);
+app.route('/orders', ordersRouter);
+app.route('/api/orders', ordersRouter);
 app.onError((err, c) => {
     console.error('[Hono Error]:', err);
     const status = err.status || 500;

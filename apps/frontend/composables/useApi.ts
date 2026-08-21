@@ -3,7 +3,11 @@ export const useApi = () => {
   const tokenCookie = useCookie<string | null>('auth_token')
 
   const fetchApi = async <T>(endpoint: string, options: Parameters<typeof $fetch>[1] = {}) => {
-    const apiBase = config.public.apiBase || 'http://localhost:3001'
+    const rawApiBase = config.public.apiBase || 'http://localhost:3001'
+    const baseUrl = rawApiBase.replace(/\/$/, '')
+    const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`
+    const url = `${baseUrl}${cleanEndpoint}`
+
     const token = tokenCookie.value
 
     const headers = { ...(options.headers as Record<string, string> || {}) } as Record<string, string>
@@ -12,7 +16,7 @@ export const useApi = () => {
     }
 
     try {
-      const response = await $fetch<T>(`${apiBase}${endpoint}`, {
+      const response = await $fetch<T>(url, {
         ...options,
         headers,
       })
