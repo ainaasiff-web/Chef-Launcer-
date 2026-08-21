@@ -3,7 +3,10 @@ export const useApi = () => {
   const tokenCookie = useCookie<string | null>('auth_token')
 
   const fetchApi = async <T>(endpoint: string, options: Parameters<typeof $fetch>[1] = {}) => {
-    const rawApiBase = config.public.apiBase || 'http://localhost:3001'
+    let rawApiBase = config.public.apiBase || 'https://chef-launcher-backend.anawasilay.workers.dev'
+    if (import.meta.client && rawApiBase.includes('localhost') && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+      rawApiBase = 'https://chef-launcher-backend.anawasilay.workers.dev'
+    }
     const baseUrl = rawApiBase.replace(/\/$/, '')
     const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`
     const url = `${baseUrl}${cleanEndpoint}`

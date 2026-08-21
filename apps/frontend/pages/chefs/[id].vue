@@ -286,7 +286,7 @@ const handleOrderDish = async (dish: any, mealCategoryName: string) => {
       <!-- Hero Banner -->
       <div class="relative bg-neutral-900 overflow-hidden">
         <div v-if="chef.profileImage" class="absolute inset-0">
-          <img :src="chef.profileImage" class="w-full h-full object-cover opacity-30" :alt="chef.name">
+          <img :src="chef.profileImage" @error="handleImageError" class="w-full h-full object-cover opacity-30" :alt="chef.name">
           <div class="absolute inset-0 bg-gradient-to-t from-neutral-900 via-neutral-900/60 to-transparent"></div>
         </div>
         <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
@@ -295,7 +295,7 @@ const handleOrderDish = async (dish: any, mealCategoryName: string) => {
           </NuxtLink>
           <div class="flex flex-col md:flex-row gap-8 items-start md:items-end">
             <div class="w-28 h-28 md:w-36 md:h-36 rounded-2xl border-4 border-white/20 overflow-hidden bg-neutral-700 flex-shrink-0 shadow-2xl">
-              <img v-if="chef.profileImage" :src="chef.profileImage" class="w-full h-full object-cover" :alt="chef.name">
+              <img v-if="chef.profileImage" :src="chef.profileImage" @error="handleImageError" class="w-full h-full object-cover" :alt="chef.name">
               <div v-else class="w-full h-full flex items-center justify-center text-5xl">🧑‍🍳</div>
             </div>
             <div class="flex-1 text-white">
