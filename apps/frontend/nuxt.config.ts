@@ -13,16 +13,16 @@ export default defineNuxtConfig({
 
   router: {
     options: {
-      hashMode: false
+      hashMode: true
     }
   },
 
   nitro: {
     preset: 'cloudflare-pages-static',
     prerender: {
-      crawlLinks: false,
+      crawlLinks: true,
       autoSubfolderIndex: true,
-      routes: ['/']
+      routes: ['/', '/auth/login', '/auth/signup', '/dashboard/user', '/dashboard/chef', '/chefs']
     }
   },
 
