@@ -3,27 +3,19 @@ export const useApi = () => {
   const tokenCookie = useCookie<string | null>('auth_token')
 
   const fetchApi = async <T>(endpoint: string, options: Parameters<typeof $fetch>[1] = {}) => {
-    let rawApiBase = config.public?.apiBase as string | undefined
+    const LIVE_BACKEND_URL = 'https://chef-launcher-backend.anawasilay.workers.dev'
 
     const isBrowser = typeof window !== 'undefined'
-    const isLocalhostDomain = isBrowser && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+    const isLocalhost = isBrowser && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
 
-    if (!isBrowser || !isLocalhostDomain) {
-      rawApiBase = 'https://chef-launcher-backend.anawasilay.workers.dev'
-    } else if (!rawApiBase) {
-      rawApiBase = 'http://localhost:3001'
-    }
-
-    let baseUrl = rawApiBase.replace(/\/$/, '')
-    if (isBrowser && !isLocalhostDomain && baseUrl.includes('localhost')) {
-      baseUrl = 'https://chef-launcher-backend.anawasilay.workers.dev'
-    }
+    let baseUrl = isLocalhost ? (config.public?.apiBase || 'http://localhost:3001') : LIVE_BACKEND_URL
+    baseUrl = baseUrl.replace(/\/$/, '')
 
     const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`
     let url = `${baseUrl}${cleanEndpoint}`
 
-    if (isBrowser && !isLocalhostDomain && url.includes('localhost')) {
-      url = url.replace(/http:\/\/localhost:\d+/, 'https://chef-launcher-backend.anawasilay.workers.dev')
+    if (!isLocalhost && url.includes('localhost')) {
+      url = url.replace(/http:\/\/localhost:\d+/g, LIVE_BACKEND_URL)
     }
 
     const token = tokenCookie.value
@@ -48,8 +40,8 @@ export const useApi = () => {
         e?.message ||
         'An error occurred'
 
-      if (typeof message === 'string' && isBrowser && !isLocalhostDomain) {
-        message = message.replace(/http:\/\/localhost:\d+/g, 'https://chef-launcher-backend.anawasilay.workers.dev')
+      if (typeof message === 'string' && isBrowser && !isLocalhost) {
+        message = message.replace(/http:\/\/localhost:\d+/g, LIVE_BACKEND_URL)
       }
 
       // Intercept 401 Unauthorized errors to clear stale token and redirect to login

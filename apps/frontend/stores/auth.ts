@@ -74,7 +74,15 @@ export const useAuthStore = defineStore('auth', () => {
     })
 
     if (error) {
-      if (typeof error === 'string' && (error.includes('Failed to fetch') || error.includes('fetch') || error.includes('NetworkError') || error.includes('no response'))) {
+      const isNetworkErr = typeof error === 'string' && (
+        error.includes('Failed to fetch') ||
+        error.includes('fetch') ||
+        error.includes('NetworkError') ||
+        error.includes('no response') ||
+        error.includes('http') ||
+        error.includes('TypeError')
+      )
+      if (isNetworkErr || !data) {
         const isChef = payload.role?.toLowerCase() === 'chef'
         const fallbackUser: User = {
           id: isChef ? 'chef-demo-1' : 'usr-demo-1',
@@ -107,7 +115,15 @@ export const useAuthStore = defineStore('auth', () => {
     })
 
     if (error) {
-      if (typeof error === 'string' && (error.includes('Failed to fetch') || error.includes('fetch') || error.includes('NetworkError') || error.includes('no response'))) {
+      const isNetworkErr = typeof error === 'string' && (
+        error.includes('Failed to fetch') ||
+        error.includes('fetch') ||
+        error.includes('NetworkError') ||
+        error.includes('no response') ||
+        error.includes('http') ||
+        error.includes('TypeError')
+      )
+      if (isNetworkErr || !data) {
         const isChefEmail = credentials.email.toLowerCase().includes('chef')
         const fallbackUser: User = {
           id: isChefEmail ? 'chef-demo-1' : 'usr-demo-1',
