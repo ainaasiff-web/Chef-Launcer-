@@ -51,7 +51,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      apiBase: process.env.NUXT_PUBLIC_API_BASE || process.env.NUXT_PUBLIC_API_BASE_URL || process.env.API_BASE_URL || 'https://chef-launcher-backend.anawasilay.workers.dev'
+      apiBase: 'https://chef-launcher-backend.anawasilay.workers.dev'
     }
   }
 })

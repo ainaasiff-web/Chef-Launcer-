@@ -14,9 +14,17 @@ export const useApi = () => {
       rawApiBase = 'http://localhost:3001'
     }
 
-    const baseUrl = rawApiBase.replace(/\/$/, '')
+    let baseUrl = rawApiBase.replace(/\/$/, '')
+    if (isBrowser && !isLocalhostDomain && baseUrl.includes('localhost')) {
+      baseUrl = 'https://chef-launcher-backend.anawasilay.workers.dev'
+    }
+
     const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`
-    const url = `${baseUrl}${cleanEndpoint}`
+    let url = `${baseUrl}${cleanEndpoint}`
+
+    if (isBrowser && !isLocalhostDomain && url.includes('localhost')) {
+      url = url.replace(/http:\/\/localhost:\d+/, 'https://chef-launcher-backend.anawasilay.workers.dev')
+    }
 
     const token = tokenCookie.value
 
@@ -33,12 +41,16 @@ export const useApi = () => {
       return { data: response, error: null }
     } catch (e: any) {
       const status = e?.status || e?.response?.status
-      const message =
+      let message =
         e?.data?.error ||
         e?.data?.message ||
         e?.statusText ||
         e?.message ||
         'An error occurred'
+
+      if (typeof message === 'string' && isBrowser && !isLocalhostDomain) {
+        message = message.replace(/http:\/\/localhost:\d+/g, 'https://chef-launcher-backend.anawasilay.workers.dev')
+      }
 
       // Intercept 401 Unauthorized errors to clear stale token and redirect to login
       if (status === 401) {
