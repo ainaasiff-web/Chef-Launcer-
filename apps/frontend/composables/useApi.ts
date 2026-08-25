@@ -8,14 +8,17 @@ export const useApi = () => {
     const isBrowser = typeof window !== 'undefined'
     const isLocalhost = isBrowser && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
 
-    let baseUrl = isLocalhost ? (config.public?.apiBase || 'http://localhost:3001') : LIVE_BACKEND_URL
+    let baseUrl = config.public?.apiBase || LIVE_BACKEND_URL
+    if (!baseUrl || baseUrl.includes('localhost')) {
+      baseUrl = LIVE_BACKEND_URL
+    }
     baseUrl = baseUrl.replace(/\/$/, '')
 
     const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`
     let url = `${baseUrl}${cleanEndpoint}`
 
-    if (!isLocalhost && url.includes('localhost')) {
-      url = url.replace(/http:\/\/localhost:\d+/g, LIVE_BACKEND_URL)
+    if (url.includes('localhost') || url.includes('127.0.0.1')) {
+      url = url.replace(/http:\/\/(localhost|127\.0\.0\.1):\d+/g, LIVE_BACKEND_URL)
     }
 
     const token = tokenCookie.value
@@ -40,8 +43,8 @@ export const useApi = () => {
         e?.message ||
         'An error occurred'
 
-      if (typeof message === 'string' && isBrowser && !isLocalhost) {
-        message = message.replace(/http:\/\/localhost:\d+/g, LIVE_BACKEND_URL)
+      if (typeof message === 'string') {
+        message = message.replace(/http:\/\/(localhost|127\.0\.0\.1):\d+/g, LIVE_BACKEND_URL)
       }
 
       // Intercept 401 Unauthorized errors to clear stale token and redirect to login

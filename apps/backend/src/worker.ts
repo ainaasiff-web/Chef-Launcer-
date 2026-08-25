@@ -13,15 +13,9 @@ const app = new Hono()
 
 app.use('*', logger())
 app.use('*', cors({
-  origin: (origin) => {
-    if (!origin || origin.includes('localhost') || origin.includes('127.0.0.1') || origin.endsWith('.pages.dev') || origin.includes('pages.dev')) {
-      return origin || '*'
-    }
-    return 'https://chef-launcer.pages.dev'
-  },
+  origin: '*',
   allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowHeaders: ['Content-Type', 'Authorization'],
-  credentials: true,
 }))
 
 app.get('/', (c) => {

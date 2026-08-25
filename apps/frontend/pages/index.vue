@@ -2,6 +2,15 @@
 import { ArrowRight, Star, ChefHat, CalendarClock, TrendingUp, Sparkles } from 'lucide-vue-next'
 
 const defaultDishImage = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&auto=format&fit=crop'
+
+const formatImageUrl = (url?: string) => {
+  if (!url) return defaultDishImage
+  if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
+    return url
+  }
+  return url.startsWith('/') ? url : `/${url}`
+}
+
 const handleImageError = (e: Event) => {
   const target = e.target as HTMLImageElement
   if (target && target.src !== defaultDishImage) {
@@ -164,11 +173,11 @@ const stats = [
             class="bg-neutral-900 rounded-3xl overflow-hidden border border-neutral-800 hover:border-orange-500/40 transition-all hover:-translate-y-2 group"
           >
             <div class="h-52 relative overflow-hidden">
-              <img :src="chef.coverImage" @error="handleImageError" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" :alt="chef.name">
+              <img :src="formatImageUrl(chef.coverImage)" @error="handleImageError" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" :alt="chef.name">
               <div class="absolute inset-0 bg-gradient-to-t from-neutral-900 via-neutral-900/20 to-transparent"></div>
               <div class="absolute bottom-4 left-4 right-4 flex justify-between items-end">
                 <div class="flex items-center gap-3">
-                  <img :src="chef.profileImage" @error="handleImageError" class="w-11 h-11 rounded-full border-2 border-white/30 object-cover">
+                  <img :src="formatImageUrl(chef.profileImage)" @error="handleImageError" class="w-11 h-11 rounded-full border-2 border-white/30 object-cover" :alt="chef.name">
                   <div>
                     <div class="font-bold text-sm">{{ chef.name }}</div>
                     <div class="text-xs text-neutral-300">{{ chef.cuisine }}</div>

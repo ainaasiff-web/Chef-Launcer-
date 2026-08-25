@@ -18,8 +18,22 @@ export const useAuthStore = defineStore('auth', () => {
     maxAge: 60 * 60 * 24 * 7, // 7 days
     sameSite: 'lax',
   })
+  const tokenCookieAlt = useCookie<string | null>('token', {
+    maxAge: 60 * 60 * 24 * 7, // 7 days
+    sameSite: 'lax',
+  })
 
-  const token = ref<string | null>(tokenCookie.value || null)
+  const getLocalStorageToken = () => {
+    if (typeof window !== 'undefined') {
+      try {
+        return localStorage.getItem('token') || localStorage.getItem('auth_token')
+      } catch (e) {}
+    }
+    return null
+  }
+
+  const initialToken = tokenCookie.value || tokenCookieAlt.value || getLocalStorageToken()
+  const token = ref<string | null>(initialToken)
   const user = ref<User | null>(null)
   const initialized = ref(false)
 
@@ -33,12 +47,28 @@ export const useAuthStore = defineStore('auth', () => {
   function setAuth(newToken: string, newUser: User) {
     token.value = newToken
     tokenCookie.value = newToken
+    tokenCookieAlt.value = newToken
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem('token', newToken)
+        localStorage.setItem('auth_token', newToken)
+        localStorage.setItem('user', JSON.stringify(newUser))
+      } catch (e) {}
+    }
     user.value = newUser
   }
 
   function logout() {
     token.value = null
     tokenCookie.value = null
+    tokenCookieAlt.value = null
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.removeItem('token')
+        localStorage.removeItem('auth_token')
+        localStorage.removeItem('user')
+      } catch (e) {}
+    }
     user.value = null
   }
 
@@ -149,8 +179,18 @@ export const useAuthStore = defineStore('auth', () => {
   async function initAuth() {
     if (initialized.value) return
     initialized.value = true
-    if (tokenCookie.value) {
-      token.value = tokenCookie.value
+
+    const currentToken = tokenCookie.value || tokenCookieAlt.value || getLocalStorageToken()
+    if (currentToken) {
+      token.value = currentToken
+      if (typeof window !== 'undefined' && !user.value) {
+        try {
+          const cachedUser = localStorage.getItem('user')
+          if (cachedUser) {
+            user.value = JSON.parse(cachedUser)
+          }
+        } catch (e) {}
+      }
       await fetchUser()
     }
   }

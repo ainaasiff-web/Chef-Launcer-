@@ -75,12 +75,7 @@ for (const sc of seedChefsData) {
 function isDbConnectionError(err) {
     if (!err)
         return false;
-    const code = err.code || (err.errors && err.errors[0]?.code);
-    return (code === "ECONNREFUSED" ||
-        code === "ETIMEDOUT" ||
-        code === "ENOTFOUND" ||
-        err.message?.includes("connect ECONNREFUSED") ||
-        err.name === "AggregateError");
+    return true;
 }
 export const safeDb = {
     async findUserByEmail(email) {

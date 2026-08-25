@@ -18,12 +18,7 @@ export default defineNuxtConfig({
   },
 
   nitro: {
-    preset: 'cloudflare-pages-static',
-    prerender: {
-      crawlLinks: true,
-      autoSubfolderIndex: true,
-      routes: ['/', '/auth/login', '/auth/signup', '/dashboard/user', '/dashboard/chef', '/chefs']
-    }
+    preset: 'cloudflare-pages'
   },
 
   experimental: {
@@ -51,7 +46,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      apiBase: 'https://chef-launcher-backend.anawasilay.workers.dev'
+      apiBase: process.env.NUXT_PUBLIC_API_BASE_URL || 'https://chef-launcher-backend.anawasilay.workers.dev'
     }
   }
 })
