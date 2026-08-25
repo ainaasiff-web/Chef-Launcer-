@@ -33,7 +33,8 @@ const handleLogin = async () => {
   }
   
   const userRole = (result.user?.role || '').toLowerCase()
-  router.push(userRole === 'chef' ? '/dashboard/chef' : '/dashboard/user')
+  const targetPath = userRole === 'chef' ? '/dashboard/chef' : '/dashboard/user'
+  await navigateTo(targetPath)
 }
 </script>
 

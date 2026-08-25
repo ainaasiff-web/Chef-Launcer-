@@ -73,7 +73,14 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   async function fetchUser() {
-    if (!token.value) return false
+    const currentToken = token.value || getLocalStorageToken() || tokenCookie.value || tokenCookieAlt.value
+    if (!currentToken) return false
+
+    const route = useRoute()
+    if (route.path.startsWith('/auth/')) {
+      return false
+    }
+
     const { fetchApi } = useApi()
     const { data, error } = await fetchApi<{ success: boolean; user: User }>('/auth/me')
 
@@ -81,7 +88,7 @@ export const useAuthStore = defineStore('auth', () => {
       user.value = data.user
       return true
     } else if (error && typeof error === 'string' && (error.includes('Failed to fetch') || error.includes('fetch') || error.includes('NetworkError'))) {
-      if (!user.value && token.value) {
+      if (!user.value && currentToken) {
         user.value = {
           id: 'usr-demo-1',
           email: 'user@example.com',

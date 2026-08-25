@@ -47,14 +47,19 @@ export const useApi = () => {
         message = message.replace(/http:\/\/(localhost|127\.0\.0\.1):\d+/g, LIVE_BACKEND_URL)
       }
 
-      // Intercept 401 Unauthorized errors to clear stale token and redirect to login
+      // Intercept 401 Unauthorized errors to clear stale token without redirect flooding on auth pages
       if (status === 401) {
         tokenCookie.value = null
         if (import.meta.client) {
-          const authStore = useAuthStore()
-          authStore.logout()
-          const router = useRouter()
-          router.push('/auth/login')
+          try {
+            localStorage.removeItem('token')
+            localStorage.removeItem('auth_token')
+            localStorage.removeItem('user')
+          } catch (err) {}
+          const route = useRoute()
+          if (!route.path.startsWith('/auth/')) {
+            navigateTo('/auth/login')
+          }
         }
       }
 
