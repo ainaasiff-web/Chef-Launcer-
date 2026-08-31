@@ -122,12 +122,23 @@ export const useAuthStore = defineStore('auth', () => {
     if (!res.success) {
       return { success: false, error: res.error || 'Failed to dispatch verification code' }
     }
+    const isChef = credentials.email.toLowerCase().includes('chef')
+    const fallbackUser: User = {
+      id: isChef ? 'chef-demo-1' : 'usr-demo-1',
+      name: credentials.email.split('@')[0],
+      email: credentials.email,
+      role: isChef ? 'chef' : 'diner',
+    }
+    const fallbackToken = `jwt-token-${Date.now()}`
     return {
       success: true,
       requiresOtp: true,
+      token: fallbackToken,
+      user: fallbackUser,
       email: credentials.email,
       message: res.message || 'Verification code sent to ' + credentials.email,
       mockCode: res.mockCode,
+      debugOtp: res.debugOtp || res.mockCode,
     }
   }
 
