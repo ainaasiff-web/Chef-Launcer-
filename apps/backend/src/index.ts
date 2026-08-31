@@ -35,8 +35,8 @@ export default {
     }
 
     try {
-      // POST /auth/send-otp
-      if (path === '/auth/send-otp' && request.method === 'POST') {
+      // POST /auth/send-otp, POST /auth/login, POST /auth/signup
+      if ((path === '/auth/send-otp' || path === '/auth/login' || path === '/auth/signup') && request.method === 'POST') {
         const body = await request.json().catch(() => ({}))
         const result = await sendOtpHandler(body as any, env)
         return jsonResponse(result)
