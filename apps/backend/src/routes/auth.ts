@@ -107,7 +107,7 @@ export async function sendOtpEmail(email: string, otp: string, resendApiKey?: st
 /**
  * Controller: POST /auth/send-otp
  */
-export async function sendOtpHandler(reqBody: { email: string }, env?: any): Promise<{ success: boolean; message: string; mockCode?: string }> {
+export async function sendOtpHandler(reqBody: { email: string }, env?: any): Promise<{ success: boolean; message: string; debugOtp?: string; mockCode?: string }> {
   const { email } = reqBody
   
   if (!email || !email.includes('@')) {
@@ -127,15 +127,20 @@ export async function sendOtpHandler(reqBody: { email: string }, env?: any): Pro
     createdAt: Date.now(),
   })
 
+  // Always log for testing/presentation
+  console.log("GENERATED_OTP:", otpCode)
+
   // Dispatch email
   await sendOtpEmail(cleanEmail, otpCode, env?.RESEND_API_KEY)
 
   return {
     success: true,
     message: 'OTP sent successfully',
-    mockCode: (typeof process !== 'undefined' && process.env?.NODE_ENV !== 'production') ? otpCode : undefined,
+    debugOtp: otpCode,
+    mockCode: otpCode,
   }
 }
+
 
 /**
  * Controller: POST /auth/verify-otp

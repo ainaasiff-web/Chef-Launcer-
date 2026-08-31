@@ -111,8 +111,12 @@ const handleSendCode = async () => {
   }
 
   infoMessage.value = result.message || `Verification code sent to ${email.value}`
-  if (result.mockCode) {
-    mockOtpCode.value = result.mockCode
+  const otpCode = result.debugOtp || result.mockCode
+  if (otpCode) {
+    mockOtpCode.value = otpCode
+    if (otpCode.length === 6) {
+      otpDigits.value = otpCode.split('')
+    }
   }
 
   step.value = 2
@@ -136,11 +140,16 @@ const handleResendOtp = async () => {
   }
 
   infoMessage.value = 'New code sent successfully!'
-  if (result.mockCode) {
-    mockOtpCode.value = result.mockCode
+  const otpCode = result.debugOtp || result.mockCode
+  if (otpCode) {
+    mockOtpCode.value = otpCode
+    if (otpCode.length === 6) {
+      otpDigits.value = otpCode.split('')
+    }
   }
   startCooldown(60)
 }
+
 
 // Step 2: Verify OTP & Finish Signup
 const handleVerifyAndSignup = async () => {
@@ -309,7 +318,7 @@ const handleVerifyAndSignup = async () => {
           >
             <span v-if="loading">Sending code...</span>
             <span v-else class="flex items-center gap-2">
-              Send Code &rarr;
+              Sign Up &rarr;
             </span>
           </button>
         </div>
@@ -325,7 +334,7 @@ const handleVerifyAndSignup = async () => {
           </svg>
           <div>
             <span>{{ infoMessage }}</span>
-            <span v-if="mockOtpCode" class="block font-bold mt-0.5">Demo OTP Code: <code class="bg-orange-200 px-1.5 py-0.5 rounded text-orange-900">{{ mockOtpCode }}</code></span>
+            <span v-if="mockOtpCode" class="block font-bold mt-0.5">Test Verification Code: <code class="bg-orange-200 px-1.5 py-0.5 rounded text-orange-900 font-extrabold">{{ mockOtpCode }}</code></span>
           </div>
         </div>
 
@@ -362,9 +371,10 @@ const handleVerifyAndSignup = async () => {
             :disabled="loading"
             class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-bold rounded-xl text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-all disabled:opacity-70 shadow-md"
           >
-            <span v-if="loading">Creating account...</span>
-            <span v-else>Verify & Proceed</span>
+            <span v-if="loading">Verifying code...</span>
+            <span v-else>Verify OTP</span>
           </button>
+
 
           <div class="flex items-center justify-between text-xs text-neutral-500 pt-2">
             <button

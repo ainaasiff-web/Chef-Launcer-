@@ -95,8 +95,12 @@ const handleSendCode = async () => {
   }
 
   infoMessage.value = result.message || `Verification code sent to ${email.value}`
-  if (result.mockCode) {
-    mockOtpCode.value = result.mockCode
+  const otpCode = result.debugOtp || result.mockCode
+  if (otpCode) {
+    mockOtpCode.value = otpCode
+    if (otpCode.length === 6) {
+      otpDigits.value = otpCode.split('')
+    }
   }
 
   step.value = 2
@@ -120,11 +124,16 @@ const handleResendOtp = async () => {
   }
 
   infoMessage.value = 'New code sent successfully!'
-  if (result.mockCode) {
-    mockOtpCode.value = result.mockCode
+  const otpCode = result.debugOtp || result.mockCode
+  if (otpCode) {
+    mockOtpCode.value = otpCode
+    if (otpCode.length === 6) {
+      otpDigits.value = otpCode.split('')
+    }
   }
   startCooldown(60)
 }
+
 
 // Step 2: Verify OTP Code & Sign In
 const handleVerifyLogin = async () => {

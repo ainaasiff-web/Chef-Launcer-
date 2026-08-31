@@ -134,7 +134,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   async function sendOtp(email: string) {
     const { fetchApi } = useApi()
-    const { data, error } = await fetchApi<{ success: boolean; message: string; mockCode?: string }>('/auth/send-otp', {
+    const { data, error } = await fetchApi<{ success: boolean; message: string; debugOtp?: string; mockCode?: string }>('/auth/send-otp', {
       method: 'POST',
       body: { email },
     })
@@ -144,20 +144,24 @@ export const useAuthStore = defineStore('auth', () => {
       return {
         success: true,
         message: 'Verification code dispatched to ' + email,
+        debugOtp: '123456',
         mockCode: '123456',
       }
     }
 
     if (data?.success) {
+      const code = data.debugOtp || data.mockCode
       return {
         success: true,
         message: data.message || 'OTP sent successfully',
-        mockCode: data.mockCode,
+        debugOtp: code,
+        mockCode: code,
       }
     }
 
     return { success: false, error: 'Failed to send OTP' }
   }
+
 
   async function verifyOtp(payload: { email: string; otp: string; userData?: any }) {
     const { fetchApi } = useApi()
