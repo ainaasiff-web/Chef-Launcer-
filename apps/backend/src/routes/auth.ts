@@ -70,11 +70,11 @@ export async function sendOtpEmail(email: string, otp: string, resendApiKey?: st
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          from: 'Chef Launcher <auth@cheflauncher.com>',
+          from: 'Chef Launcher <onboarding@resend.dev>',
           to: [email],
           subject: 'Your Chef Launcher Verification Code',
           html: `
-            <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; padding: 20px; border: 1px solid #eee; rounded: 12px;">
+            <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 12px;">
               <h2 style="color: #ea580c; text-align: center;">Chef Launcher</h2>
               <p style="font-size: 16px; color: #333;">Your 6-digit verification code is:</p>
               <div style="background-color: #fff7ed; border: 2px dashed #f97316; border-radius: 12px; padding: 16px; text-align: center; margin: 20px 0;">
