@@ -109,6 +109,35 @@ export default {
         })
       }
 
+      // GET /chefs, /chefs/:id, /chefs/:id/weekly-schedule, /chefs/:id/a-la-carte
+      if (path === '/chefs' || path.startsWith('/chefs/')) {
+        const demoChefsList = [
+          { id: 'demo-1', name: 'Marco Rossi', bio: 'Award-winning Italian chef with 15 years of experience in Michelin-starred restaurants.', cuisineType: 'Italian', rating: '4.9', reviews: 142, profileImage: 'https://images.unsplash.com/photo-1607631568010-a87245c0daf8?w=800&auto=format&fit=crop', user: { id: 'u1', email: 'marco@cheflaunch.com' } },
+          { id: 'demo-2', name: 'Kenji Tanaka', bio: 'Passionate sushi master trained in Tokyo for over a decade.', cuisineType: 'Japanese', rating: '5.0', reviews: 98, profileImage: 'https://images.unsplash.com/photo-1581299894007-aaa50297cf16?w=800&auto=format&fit=crop', user: { id: 'u2', email: 'kenji@cheflaunch.com' } },
+          { id: 'demo-3', name: 'Sophie Dubois', bio: 'Farm-to-table French cuisine. Trained at Le Cordon Bleu Paris.', cuisineType: 'French', rating: '4.8', reviews: 76, profileImage: 'https://images.unsplash.com/photo-1556909172-54557c7e4fb7?w=800&auto=format&fit=crop', user: { id: 'u3', email: 'sophie@cheflaunch.com' } },
+          { id: 'demo-4', name: 'Carlos Mendez', bio: 'Authentic Mexican street food elevated to fine dining.', cuisineType: 'Mexican', rating: '4.7', reviews: 203, profileImage: 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=800&auto=format&fit=crop', user: { id: 'u4', email: 'carlos@cheflaunch.com' } },
+          { id: 'demo-5', name: 'Priya Sharma', bio: 'Modern Indian cuisine blending aromatic spices.', cuisineType: 'Indian', rating: '4.9', reviews: 118, profileImage: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=800&auto=format&fit=crop', user: { id: 'u5', email: 'priya@cheflaunch.com' } },
+          { id: 'demo-6', name: 'Alex Papadopoulos', bio: 'Mediterranean fusion expert.', cuisineType: 'Mediterranean', rating: '4.6', reviews: 89, profileImage: 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=800&auto=format&fit=crop', user: { id: 'u6', email: 'alex@cheflaunch.com' } }
+        ]
+
+        if (path === '/chefs' || path === '/chefs/') {
+          return jsonResponse({ success: true, data: demoChefsList })
+        }
+
+        const chefId = path.split('/')[2]
+        const matchedChef = demoChefsList.find(c => c.id === chefId) || demoChefsList[0]
+
+        if (path.endsWith('/weekly-schedule')) {
+          return jsonResponse({ success: true, data: [] })
+        }
+
+        if (path.endsWith('/a-la-carte')) {
+          return jsonResponse({ success: true, data: [] })
+        }
+
+        return jsonResponse({ success: true, data: matchedChef })
+      }
+
       // Root endpoint healthcheck
       if (path === '/' || path === '/health') {
         return jsonResponse({
