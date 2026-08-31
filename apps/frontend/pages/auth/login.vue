@@ -98,11 +98,9 @@ const handleSendCode = async () => {
   const otpCode = result.debugOtp || result.mockCode
   if (otpCode) {
     mockOtpCode.value = otpCode
-    if (otpCode.length === 6) {
-      otpDigits.value = otpCode.split('')
-    }
   }
 
+  otpDigits.value = ['', '', '', '', '', '']
   step.value = 2
   startCooldown(60)
 }
@@ -127,10 +125,8 @@ const handleResendOtp = async () => {
   const otpCode = result.debugOtp || result.mockCode
   if (otpCode) {
     mockOtpCode.value = otpCode
-    if (otpCode.length === 6) {
-      otpDigits.value = otpCode.split('')
-    }
   }
+  otpDigits.value = ['', '', '', '', '', '']
   startCooldown(60)
 }
 

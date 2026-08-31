@@ -114,13 +114,17 @@ const handleSendCode = async () => {
   const otpCode = result.debugOtp || result.mockCode
   if (otpCode) {
     mockOtpCode.value = otpCode
-    if (otpCode.length === 6) {
-      otpDigits.value = otpCode.split('')
-    }
   }
 
+  // Reset OTP digits to empty so the user is forced to enter the code manually
+  otpDigits.value = ['', '', '', '', '', '']
   step.value = 2
   startCooldown(60)
+
+  setTimeout(() => {
+    const firstInput = document.getElementById('signup-otp-digit-0') as HTMLInputElement
+    if (firstInput) firstInput.focus()
+  }, 100)
 }
 
 // Resend OTP Code
@@ -143,10 +147,8 @@ const handleResendOtp = async () => {
   const otpCode = result.debugOtp || result.mockCode
   if (otpCode) {
     mockOtpCode.value = otpCode
-    if (otpCode.length === 6) {
-      otpDigits.value = otpCode.split('')
-    }
   }
+  otpDigits.value = ['', '', '', '', '', '']
   startCooldown(60)
 }
 
