@@ -22,7 +22,7 @@ function jsonResponse(data: any, status = 200) {
 }
 
 export default {
-  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+  async fetch(request: Request, env: Env, ctx: any): Promise<Response> {
     const url = new URL(request.url)
     const path = url.pathname
 
@@ -66,16 +66,43 @@ export default {
         })
       }
 
-      // GET /subscriptions
-      if (path === '/subscriptions' && request.method === 'GET') {
+      // GET & POST /subscriptions
+      if (path === '/subscriptions') {
+        if (request.method === 'POST') {
+          const body = await request.json().catch(() => ({}))
+          const subId = 'sub-' + Date.now()
+          return jsonResponse({
+            success: true,
+            subscription: {
+              id: subId,
+              status: 'active',
+              ...body,
+              createdAt: new Date().toISOString(),
+            },
+          })
+        }
         return jsonResponse({
           success: true,
           data: [],
         })
       }
 
-      // GET /orders/me
-      if (path === '/orders/me' && request.method === 'GET') {
+      // GET & POST /orders
+      if (path === '/orders' || path === '/orders/me') {
+        if (request.method === 'POST') {
+          const body = await request.json().catch(() => ({}))
+          const orderId = 'ord-' + Date.now()
+          const orderNumber = `ORD-${Math.floor(10000 + Math.random() * 90000)}`
+          return jsonResponse({
+            success: true,
+            order: {
+              id: orderId,
+              orderNumber,
+              ...body,
+              createdAt: new Date().toISOString(),
+            },
+          })
+        }
         return jsonResponse({
           success: true,
           data: [],
