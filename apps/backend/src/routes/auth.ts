@@ -107,7 +107,7 @@ export async function sendOtpEmail(email: string, otp: string, resendApiKey?: st
 /**
  * Controller: POST /auth/send-otp
  */
-export async function sendOtpHandler(reqBody: { email: string }, env?: any): Promise<{ success: boolean; message: string; debugOtp?: string; mockCode?: string; token?: string; user?: any }> {
+export async function sendOtpHandler(reqBody: { email: string }, env?: any): Promise<{ success: boolean; message: string; debugOtp?: string; mockCode?: string }> {
   const { email } = reqBody
   
   if (!email || !email.includes('@')) {
@@ -133,23 +133,11 @@ export async function sendOtpHandler(reqBody: { email: string }, env?: any): Pro
   // Dispatch email
   await sendOtpEmail(cleanEmail, otpCode, env?.RESEND_API_KEY)
 
-  const isChef = cleanEmail.includes('chef')
-  const fallbackUser = {
-    id: isChef ? 'chef-' + Date.now() : 'usr-' + Date.now(),
-    email: cleanEmail,
-    name: cleanEmail.split('@')[0],
-    role: isChef ? 'chef' : 'diner',
-    verified: true,
-  }
-  const fallbackToken = `jwt-token-${cleanEmail.replace(/[^a-zA-Z0-9]/g, '')}-${Date.now()}`
-
   return {
     success: true,
     message: 'OTP sent successfully',
     debugOtp: otpCode,
     mockCode: otpCode,
-    token: fallbackToken,
-    user: fallbackUser,
   }
 }
 
