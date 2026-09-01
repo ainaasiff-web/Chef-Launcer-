@@ -1,12 +1,18 @@
 # Dependencies
 node_modules
+**/node_modules
+**/node_modules/
 .pnpm-store
 
 # Build outputs
 .nuxt
+**/.nuxt
 .output
+**/.output
 dist
+**/dist
 .wrangler
+**/.wrangler
 
 # Logs
 *.log
