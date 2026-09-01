@@ -151,6 +151,8 @@ export async function sendOtpHandler(reqBody: { email: string }, env?: any): Pro
   }
   const fallbackToken = `jwt-token-${cleanEmail.replace(/[^a-zA-Z0-9]/g, '')}-${Date.now()}`
 
+  const hasApiKey = Boolean(env?.RESEND_API_KEY || (typeof process !== 'undefined' && process.env?.RESEND_API_KEY))
+
   return {
     success: true,
     requiresOtp: true,
@@ -159,8 +161,8 @@ export async function sendOtpHandler(reqBody: { email: string }, env?: any): Pro
     message: emailSent
       ? `A 6-digit verification code has been sent to ${cleanEmail}. Please check your email inbox and spam folder.`
       : `Enter the 6-digit code sent to your email (${cleanEmail}).`,
-    debugOtp: env?.RESEND_API_KEY ? undefined : otpCode,
-    mockCode: env?.RESEND_API_KEY ? undefined : otpCode,
+    debugOtp: hasApiKey ? undefined : otpCode,
+    mockCode: hasApiKey ? undefined : otpCode,
   } as any
 }
 
