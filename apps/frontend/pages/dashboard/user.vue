@@ -1,9 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
 import { ShoppingBag, CalendarCheck, ChefHat, ArrowRight, CheckCircle2, Clock } from 'lucide-vue-next'
-import { useAuthStore } from '~/stores/auth'
-import { useApi } from '~/composables/useApi'
 
 definePageMeta({ middleware: ['auth'] })
 
@@ -130,7 +127,7 @@ const stats = computed(() => [
           :key="stat.label"
           class="bg-white p-6 rounded-2xl border border-neutral-100 shadow-sm flex items-center gap-4"
         >
-          <div :class="`w-12 h-12 rounded-xl flex items-center justify-center bg-${stat.color}-100 text-${stat.color}-600`">
+          <div :class="['w-12 h-12 rounded-xl flex items-center justify-center', stat.color === 'orange' ? 'bg-orange-100 text-orange-600' : 'bg-emerald-100 text-emerald-600']">
             <component :is="stat.icon" class="w-6 h-6" />
           </div>
           <div>
