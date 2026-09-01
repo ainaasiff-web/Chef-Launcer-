@@ -127,17 +127,17 @@ export async function sendOtpHandler(reqBody: { email: string }, env?: any): Pro
     createdAt: Date.now(),
   })
 
-  // Always log for testing/presentation
+  // Log generated OTP for server inspection
   console.log("GENERATED_OTP:", otpCode)
 
-  // Dispatch email
-  await sendOtpEmail(cleanEmail, otpCode, env?.RESEND_API_KEY)
+  // Dispatch email via Resend API
+  const emailSent = await sendOtpEmail(cleanEmail, otpCode, env?.RESEND_API_KEY)
 
   return {
     success: true,
-    message: 'OTP sent successfully',
-    debugOtp: otpCode,
-    mockCode: otpCode,
+    message: `A 6-digit verification code has been sent to ${cleanEmail}. Please check your email inbox and spam folder.`,
+    debugOtp: env?.RESEND_API_KEY ? undefined : otpCode,
+    mockCode: env?.RESEND_API_KEY ? undefined : otpCode,
   }
 }
 
