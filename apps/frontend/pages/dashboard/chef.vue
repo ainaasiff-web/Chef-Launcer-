@@ -22,6 +22,14 @@ const tabs = ref<'all' | 'set_menu' | 'a_la_carte' | 'subscribers'>('all')
 
 const defaultDishImage = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500&auto=format&fit=crop'
 
+const formatPrice = (val: number | string | undefined | null): string => {
+  if (val === undefined || val === null || val === '') return '0'
+  const num = Number(val)
+  if (isNaN(num)) return '0'
+  const finalVal = num > 100000 ? Math.round(num / 100) : num
+  return finalVal.toLocaleString('en-PK')
+}
+
 const handleImageError = (e: Event) => {
   const target = e.target as HTMLImageElement
   if (target && target.src !== defaultDishImage) {
@@ -101,7 +109,7 @@ const openEditModal = (item: any) => {
   itemName.value = item.name || item.title || ''
   itemDescription.value = item.description || ''
   itemCategory.value = item.category || 'Mains'
-  itemPriceDollars.value = item.price ? Number((item.price / 100).toFixed(2)) : null
+  itemPriceDollars.value = item.price ? (item.price > 100000 ? Math.round(item.price / 100) : Number(item.price)) : null
   itemImageUrl.value = item.imageUrl || ''
   itemIsAvailable.value = item.isAvailable !== false
   itemDayOfWeek.value = item.dayOfWeek || 'MONDAY'
@@ -119,7 +127,7 @@ const handleSaveItem = async () => {
   successMsg.value = ''
 
   try {
-    const priceCents = Math.round(Number(itemPriceDollars.value) * 100)
+    const priceCents = Math.round(Number(itemPriceDollars.value))
 
     if (editingItem.value) {
       // Edit existing item
@@ -270,7 +278,7 @@ const stats = computed(() => [
   { label: 'Set Menus', value: setMenusCount.value.toString(), icon: UtensilsCrossed, color: 'orange' },
   { label: 'À La Carte Dishes', value: aLaCarteCount.value.toString(), icon: Utensils, color: 'emerald' },
   { label: 'Active Subscribers', value: '0', icon: Users, color: 'blue' },
-  { label: 'Total Earnings', value: '$0.00', icon: DollarSign, color: 'purple' },
+  { label: 'Total Earnings', value: 'Rs. 0', icon: DollarSign, color: 'purple' },
 ])
 </script>
 
@@ -467,7 +475,7 @@ const stats = computed(() => [
                 </div>
 
                 <div class="pt-4 border-t border-neutral-200 flex items-center justify-between">
-                  <span class="text-2xl font-extrabold text-neutral-900">${{ (item.price / 100).toFixed(2) }}</span>
+                  <span class="text-2xl font-extrabold text-neutral-900">Rs. {{ formatPrice(item.price) }}</span>
                   <span class="text-xs text-neutral-400 font-mono">ID: {{ item.id.slice(0, 8) }}...</span>
                 </div>
               </div>
@@ -580,17 +588,17 @@ const stats = computed(() => [
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-neutral-700 mb-1">Price (USD)</label>
+              <label class="block text-sm font-medium text-neutral-700 mb-1">Price (PKR / Rs.)</label>
               <div class="relative">
-                <span class="absolute left-3.5 top-3 text-neutral-400 font-bold">$</span>
+                <span class="absolute left-3 top-3.5 text-neutral-400 font-bold text-xs">Rs.</span>
                 <input
                   v-model.number="itemPriceDollars"
                   type="number"
-                  step="0.01"
-                  min="0.99"
+                  step="1"
+                  min="1"
                   required
-                  class="w-full pl-8 pr-4 py-3 border border-neutral-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none text-neutral-900"
-                  placeholder="24.99"
+                  class="w-full pl-9 pr-4 py-3 border border-neutral-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none text-neutral-900"
+                  placeholder="2200"
                 >
               </div>
             </div>

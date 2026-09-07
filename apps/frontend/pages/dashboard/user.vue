@@ -32,6 +32,14 @@ onMounted(async () => {
   }
 })
 
+const formatPrice = (val: number | string | undefined | null): string => {
+  if (val === undefined || val === null || val === '') return '0'
+  const num = Number(val)
+  if (isNaN(num)) return '0'
+  const finalVal = num > 100000 ? Math.round(num / 100) : num
+  return finalVal.toLocaleString('en-PK')
+}
+
 const defaultDishImage = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500&auto=format&fit=crop'
 
 const handleImageError = (e: Event) => {
@@ -221,7 +229,7 @@ const stats = computed(() => [
               </div>
               <div class="pt-4 border-t border-neutral-200 flex items-center justify-between">
                 <span class="text-lg font-bold text-neutral-900">
-                  ${{ (sub.menu?.price ? sub.menu.price / 100 : 0).toFixed(2) }}
+                  Rs. {{ formatPrice(sub.menu?.price) }}
                 </span>
                 <span class="text-xs text-neutral-400 font-mono">ID: {{ sub.id.slice(0, 8) }}...</span>
               </div>
@@ -280,7 +288,7 @@ const stats = computed(() => [
               </div>
               <div class="text-right">
                 <div class="font-extrabold text-neutral-900 text-lg">
-                  ${{ (order.price / 100).toFixed(2) }}
+                  Rs. {{ formatPrice(order.price) }}
                 </div>
                 <span class="inline-block text-xs text-emerald-700 font-bold bg-emerald-100 px-2.5 py-0.5 rounded-full uppercase mt-1">
                   {{ order.status }}

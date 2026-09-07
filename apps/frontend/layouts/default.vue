@@ -28,6 +28,7 @@ const handleLogout = () => {
           
           <nav class="hidden md:flex gap-8 items-center">
             <NuxtLink to="/chefs" class="text-sm font-medium text-neutral-600 hover:text-orange-500 transition-colors">Find Chefs</NuxtLink>
+            <NuxtLink to="/menus" class="text-sm font-medium text-neutral-600 hover:text-orange-500 transition-colors">Menus</NuxtLink>
             <a
               href="/downloads/chef-launcher.apk"
               download="chef-launcher.apk"
@@ -61,6 +62,7 @@ const handleLogout = () => {
       <div v-if="isMenuOpen" class="md:hidden bg-white border-t border-neutral-100 p-4 absolute w-full left-0">
         <nav class="flex flex-col gap-4">
           <NuxtLink to="/chefs" class="font-medium text-neutral-600" @click="isMenuOpen = false">Find Chefs</NuxtLink>
+          <NuxtLink to="/menus" class="font-medium text-neutral-600" @click="isMenuOpen = false">Menus</NuxtLink>
           <a
             href="/downloads/chef-launcher.apk"
             download="chef-launcher.apk"
