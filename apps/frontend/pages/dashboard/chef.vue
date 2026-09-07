@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import { LayoutDashboard, UtensilsCrossed, Users, DollarSign, Plus, Trash2, Edit3, ExternalLink, X, Clock, Check, EyeOff, Utensils, Calendar } from 'lucide-vue-next'
+import { LayoutDashboard, UtensilsCrossed, Users, DollarSign, Plus, Trash2, Edit3, ExternalLink, X, Clock, Check, EyeOff, Utensils, Calendar, Smartphone } from 'lucide-vue-next'
 import { useAuthStore } from '~/stores/auth'
 import { useApi } from '~/composables/useApi'
 
@@ -292,7 +292,15 @@ const stats = computed(() => [
             <span v-if="authStore.user?.dob"><strong>DOB:</strong> {{ authStore.user?.dob }}</span>
           </div>
         </div>
-        <div class="flex gap-3">
+        <div class="flex flex-wrap gap-3">
+          <a
+            href="/downloads/chef-launcher.apk"
+            download="chef-launcher.apk"
+            class="inline-flex items-center gap-2 bg-white hover:bg-orange-50 text-orange-600 border border-orange-200 px-5 py-2.5 rounded-xl font-semibold transition-colors shadow-sm"
+          >
+            <Smartphone class="w-5 h-5" />
+            Download App
+          </a>
           <button
             @click="openCreateModal"
             class="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-5 py-2.5 rounded-xl font-semibold transition-colors shadow-sm"

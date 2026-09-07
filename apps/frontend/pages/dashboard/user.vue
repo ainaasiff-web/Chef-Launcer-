@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import { ShoppingBag, CalendarCheck, ChefHat, ArrowRight, CheckCircle2, Clock } from 'lucide-vue-next'
+import { ShoppingBag, CalendarCheck, ChefHat, ArrowRight, CheckCircle2, Clock, Smartphone } from 'lucide-vue-next'
 
 definePageMeta({ middleware: ['auth'] })
 
@@ -111,13 +111,23 @@ const stats = computed(() => [
             <span v-if="authStore.user?.dob"><strong>DOB:</strong> {{ authStore.user?.dob }}</span>
           </div>
         </div>
-        <NuxtLink
-          to="/chefs"
-          class="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-5 py-2.5 rounded-xl font-semibold transition-colors shadow-sm shrink-0"
-        >
-          <ChefHat class="w-5 h-5" />
-          Find New Menus
-        </NuxtLink>
+        <div class="flex flex-wrap gap-3 shrink-0">
+          <a
+            href="/downloads/chef-launcher.apk"
+            download="chef-launcher.apk"
+            class="inline-flex items-center gap-2 bg-white hover:bg-orange-50 text-orange-600 border border-orange-200 px-5 py-2.5 rounded-xl font-semibold transition-colors shadow-sm"
+          >
+            <Smartphone class="w-5 h-5" />
+            Download App
+          </a>
+          <NuxtLink
+            to="/chefs"
+            class="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-5 py-2.5 rounded-xl font-semibold transition-colors shadow-sm"
+          >
+            <ChefHat class="w-5 h-5" />
+            Find New Menus
+          </NuxtLink>
+        </div>
       </div>
 
       <!-- Stats -->

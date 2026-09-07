@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useAuthStore } from '~/stores/auth'
 import { useRouter } from 'vue-router'
-import { Menu, X, ChefHat, User } from 'lucide-vue-next'
+import { Menu, X, ChefHat, User, Smartphone } from 'lucide-vue-next'
 import { ref } from 'vue'
 
 const authStore = useAuthStore()
@@ -28,6 +28,14 @@ const handleLogout = () => {
           
           <nav class="hidden md:flex gap-8 items-center">
             <NuxtLink to="/chefs" class="text-sm font-medium text-neutral-600 hover:text-orange-500 transition-colors">Find Chefs</NuxtLink>
+            <a
+              href="/downloads/chef-launcher.apk"
+              download="chef-launcher.apk"
+              class="text-sm font-medium bg-orange-50 text-orange-600 px-4 py-2 rounded-full hover:bg-orange-100 transition-all inline-flex items-center gap-2 border border-orange-200"
+            >
+              <Smartphone class="w-4 h-4" />
+              Download App
+            </a>
             
             <template v-if="!authStore.isAuthenticated">
               <NuxtLink to="/auth/login" class="text-sm font-medium text-neutral-600 hover:text-orange-500 transition-colors">Log in</NuxtLink>
@@ -53,6 +61,15 @@ const handleLogout = () => {
       <div v-if="isMenuOpen" class="md:hidden bg-white border-t border-neutral-100 p-4 absolute w-full left-0">
         <nav class="flex flex-col gap-4">
           <NuxtLink to="/chefs" class="font-medium text-neutral-600" @click="isMenuOpen = false">Find Chefs</NuxtLink>
+          <a
+            href="/downloads/chef-launcher.apk"
+            download="chef-launcher.apk"
+            class="font-medium text-orange-600 inline-flex items-center gap-2"
+            @click="isMenuOpen = false"
+          >
+            <Smartphone class="w-4 h-4" />
+            Download App
+          </a>
           <template v-if="!authStore.isAuthenticated">
             <NuxtLink to="/auth/login" class="font-medium text-neutral-600" @click="isMenuOpen = false">Log in</NuxtLink>
             <NuxtLink to="/auth/signup" class="font-medium text-orange-500" @click="isMenuOpen = false">Sign up</NuxtLink>
