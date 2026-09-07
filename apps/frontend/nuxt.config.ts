@@ -12,7 +12,7 @@ export default defineNuxtConfig({
     head: {
       title: 'Chef Launcher',
       meta: [
-        { name: 'theme-color', content: '#f97316' },
+        { name: 'theme-color', content: '#ff6e00' },
         { name: 'mobile-web-app-capable', content: 'yes' },
         { name: 'apple-mobile-web-app-capable', content: 'yes' },
         { name: 'apple-mobile-web-app-status-bar-style', content: 'default' },
