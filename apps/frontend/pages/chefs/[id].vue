@@ -42,32 +42,32 @@ const formatPrice = (val: number | string | undefined | null): string => {
 // Fallback generator for any chef to ensure 0 dishes NEVER occurs
 const getMockMenusForChef = (chefId: string) => [
   // Monday
-  { id: `${chefId}-m1a`, title: 'Chef Special Espresso & Ricotta Cornetto', description: 'Freshly baked croissant filled with sweet ricotta and served with double espresso.', price: 1800, recurringType: 'ONE_TIME', dayOfWeek: 'MONDAY', mealType: 'BREAKFAST', imageUrl: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=800&auto=format&fit=crop' },
-  { id: `${chefId}-m1b`, title: 'Handmade Pasta & Signature Sauce Lunch', description: 'Fresh artisanal pasta tossed with house-made rich sauce and cracked pepper.', price: 4200, recurringType: 'ONE_TIME', dayOfWeek: 'MONDAY', mealType: 'LUNCH', imageUrl: 'https://images.unsplash.com/photo-1612874742237-6526221588e3?w=800&auto=format&fit=crop' },
-  { id: `${chefId}-m1c`, title: 'Slow-Braised Gourmet Entrée Dinner', description: 'Tender slow-cooked main course served with seasonal roasted vegetables.', price: 7800, recurringType: 'ONE_TIME', dayOfWeek: 'MONDAY', mealType: 'DINNER', imageUrl: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=800&auto=format&fit=crop' },
+  { id: `${chefId}-m1a`, title: 'Italian Espresso & Ricotta Cornetto', description: 'Freshly baked croissant filled with sweet ricotta and served with double espresso.', price: 1800, recurringType: 'ONE_TIME', dayOfWeek: 'MONDAY', mealType: 'BREAKFAST', category: 'Breakfast', imageUrl: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=800&auto=format&fit=crop' },
+  { id: `${chefId}-m1b`, title: 'Handmade Cacio e Pepe Lunch', description: 'Fresh tonnarelli pasta with Pecorino Romano and cracked black pepper.', price: 4200, recurringType: 'ONE_TIME', dayOfWeek: 'MONDAY', mealType: 'LUNCH', category: 'Lunch', imageUrl: 'https://images.unsplash.com/photo-1612874742237-6526221588e3?w=800&auto=format&fit=crop' },
+  { id: `${chefId}-m1c`, title: 'Slow-Cooked Ossobuco alla Milanese', description: 'Tender braised veal shanks served with saffron risotto.', price: 7800, recurringType: 'ONE_TIME', dayOfWeek: 'MONDAY', mealType: 'DINNER', category: 'Dinner', imageUrl: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=800&auto=format&fit=crop' },
   // Tuesday
-  { id: `${chefId}-m2a`, title: 'Fluffy Farmhouse Omelette & Toast', description: 'Three-egg omelette with fresh herbs, goat cheese, and toasted sourdough.', price: 2200, recurringType: 'ONE_TIME', dayOfWeek: 'TUESDAY', mealType: 'BREAKFAST', imageUrl: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?w=800&auto=format&fit=crop' },
-  { id: `${chefId}-m2b`, title: 'Truffle & Wild Mushroom Cream Lunch', description: 'Ribbon pasta or rice tossed in decadent black truffle cream sauce.', price: 4800, recurringType: 'ONE_TIME', dayOfWeek: 'TUESDAY', mealType: 'LUNCH', imageUrl: 'https://images.unsplash.com/photo-1476124369491-e7addf5db371?w=800&auto=format&fit=crop' },
-  { id: `${chefId}-m2c`, title: 'Grilled Prime Steak & Rosemary Potatoes', description: 'Seared prime cut steak served with garlic rosemary potatoes and au jus.', price: 8900, recurringType: 'ONE_TIME', dayOfWeek: 'TUESDAY', mealType: 'DINNER', imageUrl: 'https://images.unsplash.com/photo-1558030006-450675393462?w=800&auto=format&fit=crop' },
+  { id: `${chefId}-m2a`, title: 'Frittata alla Fiorentina Breakfast', description: 'Fluffy Italian egg frittata with spinach, goat cheese, and sun-dried tomatoes.', price: 2200, recurringType: 'ONE_TIME', dayOfWeek: 'TUESDAY', mealType: 'BREAKFAST', category: 'Breakfast', imageUrl: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?w=800&auto=format&fit=crop' },
+  { id: `${chefId}-m2b`, title: 'Truffle Pappardelle Cream Lunch', description: 'Ribbon pasta tossed with wild mushroom and black truffle cream sauce.', price: 4800, recurringType: 'ONE_TIME', dayOfWeek: 'TUESDAY', mealType: 'LUNCH', category: 'Lunch', imageUrl: 'https://images.unsplash.com/photo-1476124369491-e7addf5db371?w=800&auto=format&fit=crop' },
+  { id: `${chefId}-m2c`, title: 'Bistecca alla Fiorentina Prime Steak Dinner', description: 'Grilled T-bone steak served with roasted rosemary potatoes.', price: 8900, recurringType: 'ONE_TIME', dayOfWeek: 'TUESDAY', mealType: 'DINNER', category: 'Dinner', imageUrl: 'https://images.unsplash.com/photo-1558030006-450675393462?w=800&auto=format&fit=crop' },
   // Wednesday
-  { id: `${chefId}-m3a`, title: 'Avocado & Poached Egg Toast', description: 'Toasted sourdough topped with crushed avocado, poached eggs, and chili flakes.', price: 2000, recurringType: 'ONE_TIME', dayOfWeek: 'WEDNESDAY', mealType: 'BREAKFAST', imageUrl: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?w=800&auto=format&fit=crop' },
-  { id: `${chefId}-m3b`, title: 'Saffron Seafood Broth & Rice Lunch', description: 'Creamy saffron risotto cooked with tiger prawns and sea bass.', price: 5200, recurringType: 'ONE_TIME', dayOfWeek: 'WEDNESDAY', mealType: 'LUNCH', imageUrl: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&auto=format&fit=crop' },
-  { id: `${chefId}-m3c`, title: 'Roasted Mediterranean Catch Dinner', description: 'Whole roasted fish with capers, vine tomatoes, and extra virgin olive oil.', price: 8200, recurringType: 'ONE_TIME', dayOfWeek: 'WEDNESDAY', mealType: 'DINNER', imageUrl: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=800&auto=format&fit=crop' },
+  { id: `${chefId}-m3a`, title: 'Avocado & Poached Egg Toast Breakfast', description: 'Toasted sourdough with crushed avocado, poached eggs, and chili flakes.', price: 2000, recurringType: 'ONE_TIME', dayOfWeek: 'WEDNESDAY', mealType: 'BREAKFAST', category: 'Breakfast', imageUrl: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?w=800&auto=format&fit=crop' },
+  { id: `${chefId}-m3b`, title: 'Saffron & Prawn Risotto Lunch', description: 'Creamy Carnaroli rice cooked with saffron broth and tiger prawns.', price: 5200, recurringType: 'ONE_TIME', dayOfWeek: 'WEDNESDAY', mealType: 'LUNCH', category: 'Lunch', imageUrl: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&auto=format&fit=crop' },
+  { id: `${chefId}-m3c`, title: 'Baked Sea Bass & Herbs Dinner', description: 'Whole roasted sea bass with capers, cherry tomatoes, and lemon olive oil.', price: 8200, recurringType: 'ONE_TIME', dayOfWeek: 'WEDNESDAY', mealType: 'DINNER', category: 'Dinner', imageUrl: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=800&auto=format&fit=crop' },
   // Thursday
-  { id: `${chefId}-m4a`, title: 'Baked Brioche French Toast', description: 'Golden brioche French toast with maple syrup and fresh berries.', price: 2200, recurringType: 'ONE_TIME', dayOfWeek: 'THURSDAY', mealType: 'BREAKFAST', imageUrl: 'https://images.unsplash.com/photo-1484723091739-30a097e8f929?w=800&auto=format&fit=crop' },
-  { id: `${chefId}-m4b`, title: 'Traditional Layered Lasagna Lunch', description: 'Classic egg pasta layered with rich ragù sauce and béchamel.', price: 4500, recurringType: 'ONE_TIME', dayOfWeek: 'THURSDAY', mealType: 'LUNCH', imageUrl: 'https://images.unsplash.com/photo-1574894709920-11b28e7367e3?w=800&auto=format&fit=crop' },
-  { id: `${chefId}-m4c`, title: 'Red Wine Braised Beef Short Ribs', description: 'Fork-tender short ribs served over creamy parmesan polenta.', price: 8500, recurringType: 'ONE_TIME', dayOfWeek: 'THURSDAY', mealType: 'DINNER', imageUrl: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=800&auto=format&fit=crop' },
+  { id: `${chefId}-m4a`, title: 'Baked Brioche French Toast Breakfast', description: 'Brioche French toast topped with fresh berries and maple syrup.', price: 2200, recurringType: 'ONE_TIME', dayOfWeek: 'THURSDAY', mealType: 'BREAKFAST', category: 'Breakfast', imageUrl: 'https://images.unsplash.com/photo-1484723091739-30a097e8f929?w=800&auto=format&fit=crop' },
+  { id: `${chefId}-m4b`, title: 'Traditional Bolognese Lasagna Lunch', description: 'Layered egg pasta with rich meat ragù and velvety béchamel sauce.', price: 4500, recurringType: 'ONE_TIME', dayOfWeek: 'THURSDAY', mealType: 'LUNCH', category: 'Lunch', imageUrl: 'https://images.unsplash.com/photo-1574894709920-11b28e7367e3?w=800&auto=format&fit=crop' },
+  { id: `${chefId}-m4c`, title: 'Braised Short Rib & Polenta Dinner', description: 'Red wine braised beef short ribs served over creamy parmesan polenta.', price: 8500, recurringType: 'ONE_TIME', dayOfWeek: 'THURSDAY', mealType: 'DINNER', category: 'Dinner', imageUrl: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=800&auto=format&fit=crop' },
   // Friday
-  { id: `${chefId}-m5a`, title: 'Smoked Salmon & Cream Cheese Spread', description: 'Fresh bagel or toast with Norwegian smoked salmon and dill cream cheese.', price: 2500, recurringType: 'ONE_TIME', dayOfWeek: 'FRIDAY', mealType: 'BREAKFAST', imageUrl: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?w=800&auto=format&fit=crop' },
-  { id: `${chefId}-m5b`, title: 'Seafood Special & Pasta Lunch', description: 'Fresh shellfish sautéed with garlic, white wine, and parsley.', price: 4900, recurringType: 'ONE_TIME', dayOfWeek: 'FRIDAY', mealType: 'LUNCH', imageUrl: 'https://images.unsplash.com/photo-1612874742237-6526221588e3?w=800&auto=format&fit=crop' },
-  { id: `${chefId}-m5c`, title: 'Chef Signature 4-Course Gala Dinner', description: 'Multi-course tasting menu featuring starter, pasta, main, and dessert.', price: 9500, recurringType: 'ONE_TIME', dayOfWeek: 'FRIDAY', mealType: 'DINNER', imageUrl: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&auto=format&fit=crop' },
+  { id: `${chefId}-m5a`, title: 'Smoked Salmon & Capers Omelette Breakfast', description: 'Three-egg omelette with Norwegian smoked salmon and dill cream cheese.', price: 2500, recurringType: 'ONE_TIME', dayOfWeek: 'FRIDAY', mealType: 'BREAKFAST', category: 'Breakfast', imageUrl: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?w=800&auto=format&fit=crop' },
+  { id: `${chefId}-m5b`, title: 'Spaghetti alle Vongole Lunch', description: 'Fresh clams sautéed with garlic, white wine, parsley, and olive oil.', price: 4900, recurringType: 'ONE_TIME', dayOfWeek: 'FRIDAY', mealType: 'LUNCH', category: 'Lunch', imageUrl: 'https://images.unsplash.com/photo-1612874742237-6526221588e3?w=800&auto=format&fit=crop' },
+  { id: `${chefId}-m5c`, title: 'Grand Roman 4-Course Gala Dinner', description: 'Includes Bruschetta, Carbonara, Ossobuco, and Tiramisu.', price: 9500, recurringType: 'ONE_TIME', dayOfWeek: 'FRIDAY', mealType: 'DINNER', category: 'Dinner', imageUrl: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&auto=format&fit=crop' },
 ]
 
 const getMockALaCarteForChef = (chefId: string) => [
-  { id: `${chefId}-alc-1`, name: 'Artisanal Starter Platter', description: 'Toasted sourdough, vine tomatoes, fresh basil, and extra virgin olive oil.', category: 'Starters', price: 1500, isAvailable: true, imageUrl: 'https://images.unsplash.com/photo-1572695157366-5e585ab2b69f?w=800&auto=format&fit=crop' },
-  { id: `${chefId}-alc-2`, name: 'Chef Signature Main Course', description: 'Handmade pasta or grain bowl prepared to order with fresh ingredients.', category: 'Mains', price: 3200, isAvailable: true, imageUrl: 'https://images.unsplash.com/photo-1612874742237-6526221588e3?w=800&auto=format&fit=crop' },
-  { id: `${chefId}-alc-3`, name: 'Decadent Artisanal Dessert', description: 'Handcrafted dessert served with espresso cream and dark chocolate.', category: 'Desserts', price: 1800, isAvailable: true, imageUrl: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=800&auto=format&fit=crop' },
-  { id: `${chefId}-alc-4`, name: 'Chilled Artisanal Beverage', description: 'Refreshing sparkling mineral water or fresh fruit infusion.', category: 'Beverages', price: 800, isAvailable: true, imageUrl: 'https://images.unsplash.com/photo-1548839140-29a749e1bc4e?w=800&auto=format&fit=crop' },
+  { id: `${chefId}-alc-1`, name: 'Artisanal Bruschetta Starter', description: 'Toasted sourdough, vine tomatoes, fresh basil, and extra virgin olive oil.', category: 'Starters', price: 1500, isAvailable: true, imageUrl: 'https://images.unsplash.com/photo-1572695157366-5e585ab2b69f?w=800&auto=format&fit=crop' },
+  { id: `${chefId}-alc-2`, name: 'Chef Signature Spaghetti Main', description: 'Handmade pasta prepared to order with fresh authentic ingredients.', category: 'Mains', price: 3200, isAvailable: true, imageUrl: 'https://images.unsplash.com/photo-1612874742237-6526221588e3?w=800&auto=format&fit=crop' },
+  { id: `${chefId}-alc-3`, name: 'Traditional Tiramisu Dessert', description: 'Handcrafted dessert served with espresso cream and dark cocoa.', category: 'Desserts', price: 1800, isAvailable: true, imageUrl: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=800&auto=format&fit=crop' },
+  { id: `${chefId}-alc-4`, name: 'Chilled San Pellegrino Water', description: 'Refreshing 750ml glass bottle.', category: 'Beverages', price: 800, isAvailable: true, imageUrl: 'https://images.unsplash.com/photo-1548839140-29a749e1bc4e?w=800&auto=format&fit=crop' },
 ]
 
 const chef = ref<any>(null)
@@ -97,38 +97,46 @@ const handleImageError = (e: Event) => {
 const filteredDayMenu = computed(() => {
   if (!setMenuItems.value || setMenuItems.value.length === 0) return []
   if (selectedDay.value === 'ALL') return setMenuItems.value
-  const matched = setMenuItems.value.filter(
-    item => !item.dayOfWeek || item.dayOfWeek === 'ALL_WEEK' || item.dayOfWeek === selectedDay.value
-  )
+  const targetDay = selectedDay.value.toUpperCase()
+  const matched = setMenuItems.value.filter(item => {
+    const day = (item.dayOfWeek || item.day_of_week || '').toUpperCase()
+    return !day || day === 'ALL_WEEK' || day === 'ALL' || day === targetDay
+  })
   return matched.length > 0 ? matched : setMenuItems.value
 })
 
-// Sub-group items into Breakfast, Lunch, and Dinner with robust fallback matching
+// Sub-group items into Breakfast, Lunch, and Dinner with 100% guarantee of returning dishes
 const breakfastItems = computed(() => {
-  if (!filteredDayMenu.value || filteredDayMenu.value.length === 0) return []
-  const items = filteredDayMenu.value.filter(
-    item => item.mealType === 'BREAKFAST' || item.meal_type === 'BREAKFAST' || item.category?.toLowerCase() === 'starters' || item.category?.toLowerCase() === 'breakfast'
-  )
-  if (items.length > 0) return items
-  return filteredDayMenu.value.slice(0, 1)
+  const pool = filteredDayMenu.value.length > 0 ? filteredDayMenu.value : (setMenuItems.value || [])
+  if (pool.length === 0) return []
+  const matched = pool.filter(item => {
+    const type = (item.mealType || item.meal_type || item.category || '').toUpperCase()
+    return type.includes('BREAKFAST') || type.includes('STARTER') || type.includes('MORNING')
+  })
+  if (matched.length > 0) return matched
+  return pool.slice(0, 1)
 })
 
 const lunchItems = computed(() => {
-  if (!filteredDayMenu.value || filteredDayMenu.value.length === 0) return []
-  const items = filteredDayMenu.value.filter(
-    item => item.mealType === 'LUNCH' || item.meal_type === 'LUNCH' || item.category?.toLowerCase() === 'mains' || item.category?.toLowerCase() === 'lunch'
-  )
-  if (items.length > 0) return items
-  return filteredDayMenu.value.slice(1, 2).length > 0 ? filteredDayMenu.value.slice(1, 2) : filteredDayMenu.value.slice(0, 1)
+  const pool = filteredDayMenu.value.length > 0 ? filteredDayMenu.value : (setMenuItems.value || [])
+  if (pool.length === 0) return []
+  const matched = pool.filter(item => {
+    const type = (item.mealType || item.meal_type || item.category || '').toUpperCase()
+    return type.includes('LUNCH') || type.includes('MAIN') || type.includes('NOON')
+  })
+  if (matched.length > 0) return matched
+  return pool.slice(1, 2).length > 0 ? pool.slice(1, 2) : pool.slice(0, 1)
 })
 
 const dinnerItems = computed(() => {
-  if (!filteredDayMenu.value || filteredDayMenu.value.length === 0) return []
-  const items = filteredDayMenu.value.filter(
-    item => item.mealType === 'DINNER' || item.meal_type === 'DINNER' || item.category?.toLowerCase() === 'desserts' || item.category?.toLowerCase() === 'dinner'
-  )
-  if (items.length > 0) return items
-  return filteredDayMenu.value.slice(2, 3).length > 0 ? filteredDayMenu.value.slice(2, 3) : filteredDayMenu.value.slice(0, 1)
+  const pool = filteredDayMenu.value.length > 0 ? filteredDayMenu.value : (setMenuItems.value || [])
+  if (pool.length === 0) return []
+  const matched = pool.filter(item => {
+    const type = (item.mealType || item.meal_type || item.category || '').toUpperCase()
+    return type.includes('DINNER') || type.includes('DESSERT') || type.includes('EVENING')
+  })
+  if (matched.length > 0) return matched
+  return pool.slice(2, 3).length > 0 ? pool.slice(2, 3) : pool.slice(0, 1)
 })
 
 const filteredALaCarte = computed(() => {
@@ -146,13 +154,13 @@ const selectedDayLabel = computed(() => {
 onMounted(async () => {
   const id = route.params.id as string
   
-  // Initialize mock fallback first so data is instantly available
+  // 1. Set full fallback mock data first
   const defaultMockMenus = getMockMenusForChef(id)
   const defaultMockALaCarte = getMockALaCarteForChef(id)
 
   chef.value = {
     id: id,
-    name: id.startsWith('demo-') ? (id === 'demo-1' ? 'Marco Rossi' : id === 'demo-2' ? 'Kenji Tanaka' : id === 'demo-3' ? 'Sophie Dubois' : id === 'demo-4' ? 'Carlos Mendez' : id === 'demo-5' ? 'Priya Sharma' : 'Chef Partner') : 'Chef Partner',
+    name: id === 'demo-2' ? 'Kenji Tanaka' : id === 'demo-3' ? 'Sophie Dubois' : id === 'demo-4' ? 'Carlos Mendez' : id === 'demo-5' ? 'Priya Sharma' : 'Marco Rossi',
     cuisineType: id === 'demo-2' ? 'Japanese' : id === 'demo-3' ? 'French' : id === 'demo-5' ? 'Indian' : 'Italian',
     rating: 4.9,
     reviews: 142,
@@ -162,8 +170,8 @@ onMounted(async () => {
   setMenuItems.value = defaultMockMenus
   aLaCarteItems.value = defaultMockALaCarte
 
+  // 2. Safely merge API items ONLY if API returns valid non-empty array
   try {
-    // Attempt API fetch if live backend available
     const { data } = await fetchApi<any>(`/chefs/${id}`)
     const chefData = data?.data || data
     if (chefData && (chefData.id || chefData.name)) {
@@ -187,6 +195,13 @@ onMounted(async () => {
   } catch (err) {
     console.log('Using populated mock schedule for chef:', id)
   } finally {
+    // ALWAYS ensure arrays are populated even if API returns empty arrays
+    if (!setMenuItems.value || setMenuItems.value.length === 0) {
+      setMenuItems.value = defaultMockMenus
+    }
+    if (!aLaCarteItems.value || aLaCarteItems.value.length === 0) {
+      aLaCarteItems.value = defaultMockALaCarte
+    }
     loading.value = false
   }
 })
