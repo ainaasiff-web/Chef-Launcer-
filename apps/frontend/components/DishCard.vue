@@ -22,10 +22,11 @@ const handleImageError = (e: Event) => {
 }
 
 const formatPrice = (val: number | string): string => {
+  if (val === undefined || val === null || val === '') return 'Rs. 2,500'
   const num = Number(val)
-  if (isNaN(num) || num === 0) return '2,500'
+  if (isNaN(num) || num === 0) return 'Rs. 2,500'
   let p = num < 500 ? Math.round(num * 250) : num
-  return p.toLocaleString('en-PK')
+  return 'Rs. ' + p.toLocaleString('en-PK')
 }
 </script>
 
@@ -40,7 +41,7 @@ const formatPrice = (val: number | string): string => {
           :alt="title"
         >
         <div class="absolute top-3 right-3 bg-white/95 backdrop-blur-sm px-3 py-1 rounded-xl font-bold text-neutral-900 text-base shadow-sm">
-          Rs. {{ formatPrice(price) }}
+          {{ formatPrice(price) }}
         </div>
       </div>
 
@@ -56,7 +57,7 @@ const formatPrice = (val: number | string): string => {
         :class="['w-full py-3 rounded-xl text-white font-semibold text-xs transition-colors flex items-center justify-center gap-2 shadow-sm', buttonBgClass || 'bg-orange-600 hover:bg-orange-700']"
       >
         <ShoppingBag class="w-4 h-4" />
-        <span>Order {{ mealCategory || 'Meal' }} · Rs. {{ formatPrice(price) }}</span>
+        <span>Order {{ mealCategory || 'Meal' }} · {{ formatPrice(price) }}</span>
       </button>
     </div>
   </div>
