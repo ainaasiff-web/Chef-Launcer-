@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useApi } from '~/composables/useApi'
 import { useAuthStore } from '~/stores/auth'
 import { useToast } from '~/composables/useToast'
+import DishCard from '~/components/DishCard.vue'
 import { Star, MapPin, ChefHat, Clock, CreditCard, ArrowLeft, Utensils, ShoppingBag, CheckCircle, AlertCircle, Calendar, Sun, Coffee, Moon } from 'lucide-vue-next'
 
 const route = useRoute()
@@ -404,40 +405,17 @@ const handleOrderDish = async (dish: any, mealCategoryName: string) => {
                 </div>
 
                 <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  <div
+                  <DishCard
                     v-for="menu in breakfastItems"
                     :key="menu.id"
-                    class="bg-white rounded-2xl border border-neutral-200 overflow-hidden shadow-sm hover:shadow-lg transition-all group flex flex-col justify-between"
-                  >
-                    <div>
-                      <div class="h-44 bg-neutral-100 relative overflow-hidden">
-                        <img
-                          :src="menu.imageUrl || menu.image_url || menu.image || defaultDishImage"
-                          @error="handleImageError"
-                          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                          :alt="menu.title || menu.name"
-                        >
-                        <div class="absolute top-3 right-3 bg-white/95 backdrop-blur-sm px-3 py-1 rounded-xl font-bold text-neutral-900 text-base shadow-sm">
-                          Rs. {{ formatPrice(menu.price) }}
-                        </div>
-                      </div>
-
-                      <div class="p-5">
-                        <h4 class="text-lg font-bold text-neutral-900 mb-1.5">{{ menu.title || menu.name }}</h4>
-                        <p class="text-neutral-500 text-xs leading-relaxed mb-4 line-clamp-3">{{ menu.description || 'Freshly prepared breakfast meal.' }}</p>
-                      </div>
-                    </div>
-
-                    <div class="px-5 pb-5">
-                      <button
-                        @click="handleOrderDish(menu, 'Breakfast')"
-                        class="w-full py-3 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-semibold text-xs transition-colors flex items-center justify-center gap-2 shadow-sm"
-                      >
-                        <ShoppingBag class="w-4 h-4" />
-                        <span>Order Breakfast · Rs. {{ formatPrice(menu.price) }}</span>
-                      </button>
-                    </div>
-                  </div>
+                    :title="menu.title || menu.name"
+                    :description="menu.description"
+                    :price="menu.price"
+                    :image-url="menu.imageUrl || menu.image_url || menu.image"
+                    meal-category="Breakfast"
+                    button-bg-class="bg-amber-600 hover:bg-amber-700"
+                    @order="handleOrderDish(menu, 'Breakfast')"
+                  />
                 </div>
               </div>
 
@@ -456,40 +434,17 @@ const handleOrderDish = async (dish: any, mealCategoryName: string) => {
                 </div>
 
                 <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  <div
+                  <DishCard
                     v-for="menu in lunchItems"
                     :key="menu.id"
-                    class="bg-white rounded-2xl border border-neutral-200 overflow-hidden shadow-sm hover:shadow-lg transition-all group flex flex-col justify-between"
-                  >
-                    <div>
-                      <div class="h-44 bg-neutral-100 relative overflow-hidden">
-                        <img
-                          :src="menu.imageUrl || menu.image_url || menu.image || defaultDishImage"
-                          @error="handleImageError"
-                          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                          :alt="menu.title || menu.name"
-                        >
-                        <div class="absolute top-3 right-3 bg-white/95 backdrop-blur-sm px-3 py-1 rounded-xl font-bold text-neutral-900 text-base shadow-sm">
-                          Rs. {{ formatPrice(menu.price) }}
-                        </div>
-                      </div>
-
-                      <div class="p-5">
-                        <h4 class="text-lg font-bold text-neutral-900 mb-1.5">{{ menu.title || menu.name }}</h4>
-                        <p class="text-neutral-500 text-xs leading-relaxed mb-4 line-clamp-3">{{ menu.description || 'Nutritious lunch meal cooked to perfection.' }}</p>
-                      </div>
-                    </div>
-
-                    <div class="px-5 pb-5">
-                      <button
-                        @click="handleOrderDish(menu, 'Lunch')"
-                        class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs transition-colors flex items-center justify-center gap-2 shadow-sm"
-                      >
-                        <ShoppingBag class="w-4 h-4" />
-                        <span>Order Lunch · Rs. {{ formatPrice(menu.price) }}</span>
-                      </button>
-                    </div>
-                  </div>
+                    :title="menu.title || menu.name"
+                    :description="menu.description"
+                    :price="menu.price"
+                    :image-url="menu.imageUrl || menu.image_url || menu.image"
+                    meal-category="Lunch"
+                    button-bg-class="bg-emerald-600 hover:bg-emerald-700"
+                    @order="handleOrderDish(menu, 'Lunch')"
+                  />
                 </div>
               </div>
 
@@ -508,40 +463,16 @@ const handleOrderDish = async (dish: any, mealCategoryName: string) => {
                 </div>
 
                 <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  <div
+                  <DishCard
                     v-for="menu in dinnerItems"
                     :key="menu.id"
-                    class="bg-white rounded-2xl border border-neutral-200 overflow-hidden shadow-sm hover:shadow-lg transition-all group flex flex-col justify-between"
-                  >
-                    <div>
-                      <div class="h-44 bg-neutral-100 relative overflow-hidden">
-                        <img
-                          :src="menu.imageUrl || menu.image_url || menu.image || defaultDishImage"
-                          @error="handleImageError"
-                          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                          :alt="menu.title || menu.name"
-                        >
-                        <div class="absolute top-3 right-3 bg-white/95 backdrop-blur-sm px-3 py-1 rounded-xl font-bold text-neutral-900 text-base shadow-sm">
-                          Rs. {{ formatPrice(menu.price) }}
-                        </div>
-                      </div>
-
-                      <div class="p-5">
-                        <h4 class="text-lg font-bold text-neutral-900 mb-1.5">{{ menu.title || menu.name }}</h4>
-                        <p class="text-neutral-500 text-xs leading-relaxed mb-4 line-clamp-3">{{ menu.description || 'Gourmet multi-course dinner package.' }}</p>
-                      </div>
-                    </div>
-
-                    <div class="px-5 pb-5">
-                      <button
-                        @click="handleOrderDish(menu, 'Dinner')"
-                        class="w-full py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs transition-colors flex items-center justify-center gap-2 shadow-sm"
-                      >
-                        <ShoppingBag class="w-4 h-4" />
-                        <span>Order Dinner · Rs. {{ formatPrice(menu.price) }}</span>
-                      </button>
-                    </div>
-                  </div>
+                    :title="menu.title || menu.name"
+                    :description="menu.description"
+                    :price="menu.price"
+                    :image-url="menu.imageUrl || menu.image_url || menu.image"
+                    meal-category="Dinner"
+                    button-bg-class="bg-indigo-600 hover:bg-indigo-700"
+                  />
                 </div>
               </div>
 
