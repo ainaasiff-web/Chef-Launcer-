@@ -177,21 +177,36 @@ onMounted(async () => {
     const chefData = data?.data || data
     if (chefData && (chefData.id || chefData.name)) {
       chef.value = { ...chef.value, ...chefData }
-      if (Array.isArray(chefData.menus) && chefData.menus.length > 0) {
-        setMenuItems.value = chefData.menus
-      }
     }
 
     const { data: scheduleRes } = await fetchApi<any>(`/chefs/${id}/weekly-schedule`)
     const items = scheduleRes?.data || scheduleRes
     if (Array.isArray(items) && items.length > 0) {
-      setMenuItems.value = items
+      setMenuItems.value = items.map((item: any) => {
+        let p = Number(item.price || 0)
+        if (p > 0 && p < 500) p = Math.round(p * 250)
+        return {
+          ...item,
+          price: p > 0 ? p : 2500,
+          title: String(item.title || item.name || 'Chef Special').replace(/\$/g, 'Rs. '),
+          description: String(item.description || '').replace(/\$/g, 'Rs. ')
+        }
+      })
     }
 
     const { data: aLaCarteRes } = await fetchApi<any>(`/chefs/${id}/a-la-carte`)
     const alc = aLaCarteRes?.data || aLaCarteRes
     if (Array.isArray(alc) && alc.length > 0) {
-      aLaCarteItems.value = alc
+      aLaCarteItems.value = alc.map((item: any) => {
+        let p = Number(item.price || 0)
+        if (p > 0 && p < 500) p = Math.round(p * 250)
+        return {
+          ...item,
+          price: p > 0 ? p : 2200,
+          name: String(item.name || item.title || 'À La Carte Item').replace(/\$/g, 'Rs. '),
+          description: String(item.description || '').replace(/\$/g, 'Rs. ')
+        }
+      })
     }
   } catch (err) {
     console.log('Using populated mock schedule for chef:', id)
