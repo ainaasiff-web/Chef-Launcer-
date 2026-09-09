@@ -186,12 +186,11 @@ onMounted(async () => {
     if (Array.isArray(items) && items.length > 0) {
       setMenuItems.value = items.map((item: any) => {
         let p = Number(item.price || 0)
-        if (p > 0 && p < 500) p = Math.round(p * 250)
         return {
           ...item,
-          price: p > 0 ? p : 2500,
-          title: String(item.title || item.name || 'Chef Special').replace(/\$/g, 'Rs. '),
-          description: String(item.description || '').replace(/\$/g, 'Rs. ')
+          price: p > 0 ? p : 1800,
+          title: String(item.title || item.name || 'Chef Special'),
+          description: String(item.description || '')
         }
       })
     }
@@ -201,12 +200,11 @@ onMounted(async () => {
     if (Array.isArray(alc) && alc.length > 0) {
       aLaCarteItems.value = alc.map((item: any) => {
         let p = Number(item.price || 0)
-        if (p > 0 && p < 500) p = Math.round(p * 250)
         return {
           ...item,
-          price: p > 0 ? p : 2200,
-          name: String(item.name || item.title || 'À La Carte Item').replace(/\$/g, 'Rs. '),
-          description: String(item.description || '').replace(/\$/g, 'Rs. ')
+          price: p > 0 ? p : 1500,
+          name: String(item.name || item.title || 'À La Carte Item'),
+          description: String(item.description || '')
         }
       })
     }
