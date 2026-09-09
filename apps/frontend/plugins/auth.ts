@@ -30,9 +30,14 @@ export default defineNuxtPlugin(async (nuxtApp) => {
     }
 
     // Migrate hash routes (/#/auth/login -> /auth/login)
-    if (window.location.hash && window.location.hash.startsWith('#/')) {
-      const cleanPath = window.location.hash.replace(/^#/, '')
-      window.history.replaceState(null, '', cleanPath)
+    if (window.location.hash) {
+      const hash = window.location.hash
+      if (hash.startsWith('#/#') || hash.startsWith('#/')) {
+        const cleanPath = hash.replace(/^#\/?#?/, '')
+        if (cleanPath && cleanPath.startsWith('/')) {
+          window.history.replaceState(null, '', cleanPath)
+        }
+      }
     }
   }
 

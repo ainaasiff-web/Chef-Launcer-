@@ -1,17 +1,13 @@
-const CACHE_NAME = 'chef-launcher-pwa-v1'
+const CACHE_NAME = 'chef-launcher-pwa-v2'
 
-self.addEventListener('install', (event) => {
-  event.waitUntil(self.skipWaiting())
+self.addEventListener('install', () => {
+  self.skipWaiting()
 })
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((names) =>
-      Promise.all(
-        names
-          .filter((name) => name !== CACHE_NAME)
-          .map((name) => caches.delete(name))
-      )
+      Promise.all(names.map((name) => caches.delete(name)))
     ).then(() => self.clients.claim())
   )
 })
@@ -26,12 +22,21 @@ self.addEventListener('fetch', (event) => {
   event.respondWith(
     fetch(event.request)
       .then((response) => {
-        if (response && response.ok) {
+        if (response && response.ok && response.type === 'basic') {
           const copy = response.clone()
           caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy))
         }
         return response
       })
-      .catch(() => caches.match(event.request))
+      .catch(async () => {
+        const cached = await caches.match(event.request)
+        if (cached) return cached
+        return new Response('Network error', {
+          status: 503,
+          statusText: 'Service Unavailable',
+          headers: { 'Content-Type': 'text/plain' },
+        })
+      })
   )
 })
+
