@@ -34,11 +34,13 @@ const selectedDishNotice = ref<string | null>(null)
 
 const formatPrice = (val: number | string | undefined | null): string => {
   if (val === undefined || val === null || val === '') return '2,500'
-  const num = Number(val)
+  const str = String(val).replace(/[^0-9.]/g, '')
+  const num = parseFloat(str)
   if (isNaN(num) || num === 0) return '2,500'
-  let finalVal = num < 500 ? Math.round(num * 250) : num
-  if (finalVal > 100000) finalVal = Math.round(finalVal / 100)
-  return finalVal.toLocaleString('en-PK')
+  let p = num
+  if (p > 0 && p <= 100) p = Math.round(p * 250)
+  else if (p > 100000) p = Math.round(p / 100)
+  return p.toLocaleString('en-PK')
 }
 
 // Fallback generator for any chef to ensure 0 dishes NEVER occurs

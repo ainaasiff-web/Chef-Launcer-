@@ -24,11 +24,13 @@ const defaultDishImage = 'https://images.unsplash.com/photo-1546069901-ba9599a7e
 
 const formatPrice = (val: number | string | undefined | null): string => {
   if (val === undefined || val === null || val === '') return '0'
-  const num = Number(val)
+  const str = String(val).replace(/[^0-9.]/g, '')
+  const num = parseFloat(str)
   if (isNaN(num) || num === 0) return '0'
-  let finalVal = num < 500 ? Math.round(num * 250) : num
-  if (finalVal > 100000) finalVal = Math.round(finalVal / 100)
-  return finalVal.toLocaleString('en-PK')
+  let p = num
+  if (p > 0 && p <= 100) p = Math.round(p * 250)
+  else if (p > 100000) p = Math.round(p / 100)
+  return p.toLocaleString('en-PK')
 }
 
 const handleImageError = (e: Event) => {

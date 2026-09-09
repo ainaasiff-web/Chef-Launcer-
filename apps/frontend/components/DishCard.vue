@@ -21,11 +21,14 @@ const handleImageError = (e: Event) => {
   }
 }
 
-const formatPrice = (val: number | string): string => {
+const formatPrice = (val: number | string | undefined | null): string => {
   if (val === undefined || val === null || val === '') return 'Rs. 2,500'
-  const num = Number(val)
+  const str = String(val).replace(/[^0-9.]/g, '')
+  const num = parseFloat(str)
   if (isNaN(num) || num === 0) return 'Rs. 2,500'
-  let p = num < 500 ? Math.round(num * 250) : num
+  let p = num
+  if (p > 0 && p <= 100) p = Math.round(p * 250)
+  else if (p > 100000) p = Math.round(p / 100)
   return 'Rs. ' + p.toLocaleString('en-PK')
 }
 </script>
