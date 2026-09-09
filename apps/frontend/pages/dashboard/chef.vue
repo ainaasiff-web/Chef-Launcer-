@@ -43,7 +43,7 @@ const itemType = ref<'SET_MENU' | 'A_LA_CARTE'>('A_LA_CARTE')
 const itemName = ref('')
 const itemDescription = ref('')
 const itemCategory = ref<'Starters' | 'Mains' | 'Desserts' | 'Beverages'>('Mains')
-const itemPriceDollars = ref<number | null>(null)
+const itemPricePkr = ref<number | null>(null)
 const itemImageUrl = ref('')
 const itemIsAvailable = ref(true)
 const itemDayOfWeek = ref<string>('MONDAY')
@@ -91,7 +91,7 @@ const resetForm = () => {
   itemName.value = ''
   itemDescription.value = ''
   itemCategory.value = 'Mains'
-  itemPriceDollars.value = null
+  itemPricePkr.value = null
   itemImageUrl.value = ''
   itemIsAvailable.value = true
   itemDayOfWeek.value = 'MONDAY'
@@ -110,7 +110,7 @@ const openEditModal = (item: any) => {
   itemName.value = item.name || item.title || ''
   itemDescription.value = item.description || ''
   itemCategory.value = item.category || 'Mains'
-  itemPriceDollars.value = item.price ? (item.price > 100000 ? Math.round(item.price / 100) : Number(item.price)) : null
+  itemPricePkr.value = item.price ? (item.price > 100000 ? Math.round(item.price / 100) : Number(item.price)) : null
   itemImageUrl.value = item.imageUrl || ''
   itemIsAvailable.value = item.isAvailable !== false
   itemDayOfWeek.value = item.dayOfWeek || 'MONDAY'
@@ -118,7 +118,7 @@ const openEditModal = (item: any) => {
 }
 
 const handleSaveItem = async () => {
-  if (!itemName.value || !itemPriceDollars.value) {
+  if (!itemName.value || !itemPricePkr.value) {
     errorMsg.value = 'Name and price are required.'
     return
   }
@@ -128,7 +128,7 @@ const handleSaveItem = async () => {
   successMsg.value = ''
 
   try {
-    const priceCents = Math.round(Number(itemPriceDollars.value))
+    const priceCents = Math.round(Number(itemPricePkr.value))
 
     if (editingItem.value) {
       // Edit existing item
@@ -593,7 +593,7 @@ const stats = computed(() => [
               <div class="relative">
                 <span class="absolute left-3 top-3.5 text-neutral-400 font-bold text-xs">Rs.</span>
                 <input
-                  v-model.number="itemPriceDollars"
+                  v-model.number="itemPricePkr"
                   type="number"
                   step="1"
                   min="1"

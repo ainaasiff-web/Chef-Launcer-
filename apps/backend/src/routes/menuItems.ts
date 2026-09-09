@@ -10,7 +10,7 @@ const createMenuItemSchema = z.object({
   name: z.string().min(1, "Item name is required"),
   description: z.string().optional(),
   category: z.string().optional().default("Mains"),
-  price: z.number().int().positive("Price must be a positive integer in cents"),
+  price: z.number().int().positive("Price must be a positive integer in PKR"),
   imageUrl: z.string().optional(),
   isAvailable: z.boolean().optional().default(true),
   type: z.enum(["SET_MENU", "A_LA_CARTE"]).optional().default("A_LA_CARTE"),

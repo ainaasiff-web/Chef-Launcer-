@@ -17,7 +17,7 @@ const normalizeSubscriptionType = (type?: string): "one_time" | "weekly" | "mont
 const createMenuSchema = z.object({
   title: z.string().min(1, "Menu title is required"),
   description: z.string().optional(),
-  price: z.number().int().positive("Price must be a positive integer in cents"),
+  price: z.number().int().positive("Price must be a positive integer in PKR"),
   subscriptionType: z.string().optional().default("one_time"),
   subscription_type: z.string().optional(),
 });
