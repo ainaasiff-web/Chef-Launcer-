@@ -23,14 +23,13 @@ const tabs = ref<'all' | 'set_menu' | 'a_la_carte' | 'subscribers'>('all')
 const defaultDishImage = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500&auto=format&fit=crop'
 
 const formatPrice = (val: number | string | undefined | null): string => {
-  if (val === undefined || val === null || val === '') return '0'
+  if (val === undefined || val === null || val === '') return '0.00'
   const str = String(val).replace(/[^0-9.]/g, '')
   const num = parseFloat(str)
-  if (isNaN(num) || num === 0) return '0'
+  if (isNaN(num) || num === 0) return '0.00'
   let p = num
-  if (p > 0 && p <= 100) p = Math.round(p * 250)
-  else if (p > 100000) p = Math.round(p / 100)
-  return p.toLocaleString('en-PK')
+  if (p > 500) p = p / 100
+  return p.toFixed(2)
 }
 
 const handleImageError = (e: Event) => {
@@ -281,7 +280,7 @@ const stats = computed(() => [
   { label: 'Set Menus', value: setMenusCount.value.toString(), icon: UtensilsCrossed, color: 'orange' },
   { label: 'À La Carte Dishes', value: aLaCarteCount.value.toString(), icon: Utensils, color: 'emerald' },
   { label: 'Active Subscribers', value: '0', icon: Users, color: 'blue' },
-  { label: 'Total Earnings', value: 'Rs. 0', icon: DollarSign, color: 'purple' },
+  { label: 'Total Earnings', value: '$0.00', icon: DollarSign, color: 'purple' },
 ])
 </script>
 
@@ -478,7 +477,7 @@ const stats = computed(() => [
                 </div>
 
                 <div class="pt-4 border-t border-neutral-200 flex items-center justify-between">
-                  <span class="text-2xl font-extrabold text-neutral-900">Rs. {{ formatPrice(item.price) }}</span>
+                  <span class="text-2xl font-extrabold text-neutral-900">${{ formatPrice(item.price) }}</span>
                   <span class="text-xs text-neutral-400 font-mono">ID: {{ item.id.slice(0, 8) }}...</span>
                 </div>
               </div>
@@ -591,17 +590,17 @@ const stats = computed(() => [
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-neutral-700 mb-1">Price (PKR / Rs.)</label>
+              <label class="block text-sm font-medium text-neutral-700 mb-1">Price (USD / $)</label>
               <div class="relative">
-                <span class="absolute left-3 top-3.5 text-neutral-400 font-bold text-xs">Rs.</span>
+                <span class="absolute left-3 top-3.5 text-neutral-400 font-bold text-xs">$</span>
                 <input
                   v-model.number="itemPricePkr"
                   type="number"
-                  step="1"
-                  min="1"
+                  step="0.01"
+                  min="0.01"
                   required
                   class="w-full pl-9 pr-4 py-3 border border-neutral-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none text-neutral-900"
-                  placeholder="2200"
+                  placeholder="15.00"
                 >
               </div>
             </div>

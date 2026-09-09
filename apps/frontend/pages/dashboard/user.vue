@@ -33,14 +33,13 @@ onMounted(async () => {
 })
 
 const formatPrice = (val: number | string | undefined | null): string => {
-  if (val === undefined || val === null || val === '') return '0'
+  if (val === undefined || val === null || val === '') return '0.00'
   const str = String(val).replace(/[^0-9.]/g, '')
   const num = parseFloat(str)
-  if (isNaN(num) || num === 0) return '0'
+  if (isNaN(num) || num === 0) return '0.00'
   let p = num
-  if (p > 0 && p <= 100) p = Math.round(p * 250)
-  else if (p > 100000) p = Math.round(p / 100)
-  return p.toLocaleString('en-PK')
+  if (p > 500) p = p / 100
+  return p.toFixed(2)
 }
 
 const defaultDishImage = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500&auto=format&fit=crop'
@@ -232,7 +231,7 @@ const stats = computed(() => [
               </div>
               <div class="pt-4 border-t border-neutral-200 flex items-center justify-between">
                 <span class="text-lg font-bold text-neutral-900">
-                  Rs. {{ formatPrice(sub.menu?.price) }}
+                  ${{ formatPrice(sub.menu?.price) }}
                 </span>
                 <span class="text-xs text-neutral-400 font-mono">ID: {{ sub.id.slice(0, 8) }}...</span>
               </div>
@@ -291,7 +290,7 @@ const stats = computed(() => [
               </div>
               <div class="text-right">
                 <div class="font-extrabold text-neutral-900 text-lg">
-                  Rs. {{ formatPrice(order.price) }}
+                  ${{ formatPrice(order.price) }}
                 </div>
                 <span class="inline-block text-xs text-emerald-700 font-bold bg-emerald-100 px-2.5 py-0.5 rounded-full uppercase mt-1">
                   {{ order.status }}

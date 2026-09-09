@@ -33,14 +33,13 @@ const categories = ['All', 'Starters', 'Mains', 'Desserts', 'Beverages']
 const selectedDishNotice = ref<string | null>(null)
 
 const formatPrice = (val: number | string | undefined | null): string => {
-  if (val === undefined || val === null || val === '') return '2,500'
+  if (val === undefined || val === null || val === '') return '$15.00'
   const str = String(val).replace(/[^0-9.]/g, '')
   const num = parseFloat(str)
-  if (isNaN(num) || num === 0) return '2,500'
+  if (isNaN(num) || num === 0) return '$15.00'
   let p = num
-  if (p > 0 && p <= 100) p = Math.round(p * 250)
-  else if (p > 100000) p = Math.round(p / 100)
-  return p.toLocaleString('en-PK')
+  if (p > 500) p = p / 100
+  return '$' + p.toFixed(2)
 }
 
 // Fallback generator for any chef to ensure 0 dishes NEVER occurs
@@ -256,12 +255,12 @@ const handleOrderDish = async (dish: any, mealCategoryName: string) => {
 
   toast.addToast({
     title: `Order #${orderNum} added successfully! 🎉`,
-    description: `Added "${dishTitle}" (Rs. ${dishPriceFormatted}) for ${categoryContext}.`,
+    description: `Added "${dishTitle}" (${dishPriceFormatted}) for ${categoryContext}.`,
     type: 'success',
     duration: 5000
   })
 
-  selectedDishNotice.value = `Order #${orderNum} confirmed for "${dishTitle}" (Rs. ${dishPriceFormatted})`
+  selectedDishNotice.value = `Order #${orderNum} confirmed for "${dishTitle}" (${dishPriceFormatted})`
   setTimeout(() => {
     selectedDishNotice.value = null
   }, 5000)
@@ -534,7 +533,7 @@ const handleOrderDish = async (dish: any, mealCategoryName: string) => {
 
                   <!-- Price tag -->
                   <div class="absolute top-3 right-3 bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-xl font-bold text-neutral-900 text-base shadow-sm">
-                    Rs. {{ formatPrice(dish.price) }}
+                    {{ formatPrice(dish.price) }}
                   </div>
                 </div>
 
@@ -556,7 +555,7 @@ const handleOrderDish = async (dish: any, mealCategoryName: string) => {
                   :class="['w-full py-3 rounded-xl font-semibold text-xs transition-colors flex items-center justify-center gap-2 shadow-sm', dish.isAvailable !== false ? 'bg-neutral-900 hover:bg-orange-500 text-white' : 'bg-neutral-200 text-neutral-400 cursor-not-allowed']"
                 >
                   <ShoppingBag class="w-4 h-4" />
-                  <span>{{ dish.isAvailable !== false ? 'Select Dish · Rs. ' + formatPrice(dish.price) : 'Unavailable' }}</span>
+                  <span>{{ dish.isAvailable !== false ? 'Select Dish · ' + formatPrice(dish.price) : 'Unavailable' }}</span>
                 </button>
               </div>
             </div>
