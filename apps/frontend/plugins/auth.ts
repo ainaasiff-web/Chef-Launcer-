@@ -28,15 +28,6 @@ export default defineNuxtPlugin(async (nuxtApp) => {
         }
       }).catch(() => {})
     }
-
-    // Migrate hash routes (/#/auth/login -> /auth/login)
-    if (window.location.hash) {
-      const rawHash = window.location.hash
-      const cleanPath = rawHash.replace(/^#+\/?#?\/?/, '/')
-      if (cleanPath && cleanPath !== '/' && cleanPath.startsWith('/')) {
-        window.history.replaceState(null, '', cleanPath)
-      }
-    }
   }
 
   const authStore = useAuthStore()

@@ -3,9 +3,9 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "build": "nuxt generate && node -e \"const fs=require('fs'); if(fs.existsSync('dist')){ fs.mkdirSync('.output/public', {recursive:true}); fs.cpSync('dist', '.output/public', {recursive:true}); fs.writeFileSync('dist/_redirects', '/* /index.html 200\\n'); fs.writeFileSync('.output/public/_redirects', '/* /index.html 200\\n'); }\"",
+    "build": "nuxt generate && node -e \"const fs=require('fs'); if(fs.existsSync('dist')){ fs.mkdirSync('.output/public', {recursive:true}); fs.cpSync('dist', '.output/public', {recursive:true}); fs.writeFileSync('dist/_redirects', '/* /index.html 200!\\n'); fs.writeFileSync('.output/public/_redirects', '/* /index.html 200!\\n'); if(fs.existsSync('dist/index.html')){ fs.copyFileSync('dist/index.html', 'dist/404.html'); fs.copyFileSync('dist/index.html', '.output/public/404.html'); } }\"",
     "dev": "nuxt dev",
-    "generate": "nuxt generate && node -e \"const fs=require('fs'); if(fs.existsSync('dist')){ fs.mkdirSync('.output/public', {recursive:true}); fs.cpSync('dist', '.output/public', {recursive:true}); fs.writeFileSync('dist/_redirects', '/* /index.html 200\\n'); fs.writeFileSync('.output/public/_redirects', '/* /index.html 200\\n'); }\"",
+    "generate": "nuxt generate && node -e \"const fs=require('fs'); if(fs.existsSync('dist')){ fs.mkdirSync('.output/public', {recursive:true}); fs.cpSync('dist', '.output/public', {recursive:true}); fs.writeFileSync('dist/_redirects', '/* /index.html 200!\\n'); fs.writeFileSync('.output/public/_redirects', '/* /index.html 200!\\n'); if(fs.existsSync('dist/index.html')){ fs.copyFileSync('dist/index.html', 'dist/404.html'); fs.copyFileSync('dist/index.html', '.output/public/404.html'); } }\"",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
   },

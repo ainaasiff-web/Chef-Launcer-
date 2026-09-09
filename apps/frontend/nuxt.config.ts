@@ -25,7 +25,11 @@ export default defineNuxtConfig({
     },
   },
 
-
+  router: {
+    options: {
+      hashMode: true
+    }
+  },
 
   nitro: {
     preset: 'cloudflare-pages'
