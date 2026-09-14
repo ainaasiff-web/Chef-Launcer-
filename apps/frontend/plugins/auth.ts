@@ -1,7 +1,7 @@
 export default defineNuxtPlugin(async (nuxtApp) => {
   if (import.meta.client) {
     // Unregister legacy Service Workers & clear stale CacheStorage (keep the PWA worker)
-    const PWA_CACHE = 'chef-launcher-pwa-v1'
+    const PWA_CACHE = 'chef-launcher-pwa-v5'
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.getRegistrations().then((registrations) => {
         for (const registration of registrations) {

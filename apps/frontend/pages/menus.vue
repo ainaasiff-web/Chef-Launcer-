@@ -24,13 +24,13 @@ const handleImageError = (e: Event) => {
 }
 
 const formatPrice = (val: number | string | undefined | null): string => {
-  if (val === undefined || val === null || val === '') return '0.00'
+  if (val === undefined || val === null || val === '') return 'Rs. 2,500'
   const str = String(val).replace(/[^0-9.]/g, '')
   const num = parseFloat(str)
-  if (isNaN(num) || num === 0) return '0.00'
+  if (isNaN(num) || num === 0) return 'Rs. 2,500'
   let p = num
-  if (p > 500) p = p / 100
-  return p.toFixed(2)
+  if (p < 500) p = p * 280
+  return 'Rs. ' + Math.round(p).toLocaleString('en-US')
 }
 
 // Master list of chef menu collections
@@ -209,12 +209,12 @@ const handleSelectDish = async (dish: any) => {
 
   toast.addToast({
     title: `Order #${orderNum} added successfully! 🎉`,
-    description: `Added "${dishTitle}" ($${priceFormatted}) to your order.`,
+    description: `Added "${dishTitle}" (${priceFormatted}) to your order.`,
     type: 'success',
     duration: 5000,
   })
 
-  selectedDishNotice.value = `Order #${orderNum} confirmed for "${dishTitle}" ($${priceFormatted})`
+  selectedDishNotice.value = `Order #${orderNum} confirmed for "${dishTitle}" (${priceFormatted})`
   setTimeout(() => {
     selectedDishNotice.value = null
   }, 5000)
@@ -327,9 +327,9 @@ const handleSelectDish = async (dish: any) => {
                   </span>
                 </div>
 
-                <!-- Starting Price Tag in USD -->
+                <!-- Starting Price Tag in PKR -->
                 <div class="absolute top-3 right-3 bg-orange-500 text-white font-extrabold px-3.5 py-1.5 rounded-xl text-xs shadow-md">
-                  From ${{ formatPrice(menu.startingPrice) }}
+                  From {{ formatPrice(menu.startingPrice) }}
                 </div>
 
                 <!-- Chef Profile Overlay on Bottom -->
@@ -403,7 +403,7 @@ const handleSelectDish = async (dish: any) => {
                   :alt="dish.name"
                 >
                 <div class="absolute top-3 right-3 bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-xl font-bold text-neutral-900 text-sm shadow-sm">
-                  ${{ formatPrice(dish.price) }}
+                  {{ formatPrice(dish.price) }}
                 </div>
                 <div class="absolute top-3 left-3 bg-black/50 backdrop-blur-md px-2.5 py-1 rounded-lg text-xs font-semibold text-white">
                   By {{ dish.chefName }}
@@ -422,7 +422,7 @@ const handleSelectDish = async (dish: any) => {
                 class="w-full py-3 rounded-xl font-semibold text-xs bg-neutral-900 hover:bg-orange-500 text-white transition-colors flex items-center justify-center gap-2 shadow-sm"
               >
                 <ShoppingBag class="w-4 h-4" />
-                <span>Select Dish · ${{ formatPrice(dish.price) }}</span>
+                <span>Select Dish · {{ formatPrice(dish.price) }}</span>
               </button>
             </div>
           </div>

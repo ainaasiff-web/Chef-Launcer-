@@ -1,8 +1,8 @@
-const CACHE_NAME = 'chef-launcher-pwa-v3'
+const CACHE_NAME = 'chef-launcher-pwa-v5'
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.add('/index.html'))
+    caches.open(CACHE_NAME).then((cache) => cache.add('/index.html')).catch(() => {})
   )
   self.skipWaiting()
 })
@@ -12,7 +12,9 @@ self.addEventListener('activate', (event) => {
     caches.keys().then((names) =>
       Promise.all(
         names.map((name) => {
-          if (name !== CACHE_NAME) return caches.delete(name)
+          if (name !== CACHE_NAME) {
+            return caches.delete(name)
+          }
         })
       )
     ).then(() => self.clients.claim())
@@ -22,53 +24,79 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return
 
-  const url = new URL(event.request.url)
+  let url
+  try {
+    url = new URL(event.request.url)
+  } catch (e) {
+    return
+  }
+
+  // Only handle HTTP/HTTPS GET requests from same origin
+  if (url.protocol !== 'http:' && url.protocol !== 'https:') return
   if (url.origin !== self.location.origin) return
   if (url.pathname.startsWith('/downloads/')) return
 
-  // Handle SPA navigation requests (/chefs/demo-2, /menus, etc.)
   if (event.request.mode === 'navigate') {
     event.respondWith(
-      fetch(event.request)
-        .then((response) => {
-          if (response && response.status === 200) {
-            const copy = response.clone()
-            caches.open(CACHE_NAME).then((cache) => cache.put('/index.html', copy))
+      (async () => {
+        try {
+          const response = await fetch(event.request)
+          if (response) {
+            if (response.status === 200) {
+              try {
+                const copy = response.clone()
+                const cache = await caches.open(CACHE_NAME)
+                await cache.put('/index.html', copy)
+              } catch (cacheErr) {}
+            }
             return response
           }
-          // Server returned 404 or error for static SPA path -> return /index.html
-          return caches.match('/index.html').then((cached) => cached || response)
+        } catch (err) {}
+
+        try {
+          const cached = await caches.match('/index.html')
+          if (cached) return cached
+        } catch (err) {}
+
+        return new Response('<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0;url=/"></head><body>Loading...</body></html>', {
+          status: 200,
+          headers: { 'Content-Type': 'text/html' },
         })
-        .catch(() => {
-          return caches.match('/index.html').then((cached) => {
-            if (cached) return cached
-            return new Response('Network error', { status: 503, headers: { 'Content-Type': 'text/plain' } })
-          })
-        })
+      })()
     )
     return
   }
 
-  // Handle standard static asset requests
   event.respondWith(
-    fetch(event.request)
-      .then((response) => {
-        if (response && response.ok && response.type === 'basic') {
-          const copy = response.clone()
-          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy))
+    (async () => {
+      try {
+        const response = await fetch(event.request)
+        if (response) {
+          if (response.ok && response.type === 'basic') {
+            try {
+              const copy = response.clone()
+              const cache = await caches.open(CACHE_NAME)
+              await cache.put(event.request, copy)
+            } catch (cacheErr) {}
+          }
+          return response
         }
-        return response
-      })
-      .catch(async () => {
+      } catch (err) {}
+
+      try {
         const cached = await caches.match(event.request)
         if (cached) return cached
-        return new Response('Network error', {
-          status: 503,
-          statusText: 'Service Unavailable',
-          headers: { 'Content-Type': 'text/plain' },
-        })
+      } catch (err) {}
+
+      return new Response('Offline', {
+        status: 503,
+        statusText: 'Service Unavailable',
+        headers: { 'Content-Type': 'text/plain' },
       })
+    })()
   )
 })
+
+
 
 
